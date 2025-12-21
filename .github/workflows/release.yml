@@ -55,7 +55,7 @@ jobs:
       - name: Get APK info
         id: apk_info
         run: |
-          APK_PATH="app/build/outputs/apk/release/linuxswords-ChessClock-release.apk"
+          APK_PATH="app/build/outputs/apk/release/linuxswords-TiltMate-release.apk"
           APK_SIZE=$(du -h "$APK_PATH" | cut -f1)
           echo "APK_PATH=$APK_PATH" >> $GITHUB_OUTPUT
           echo "APK_SIZE=$APK_SIZE" >> $GITHUB_OUTPUT
@@ -85,9 +85,9 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ steps.version.outputs.TAG_NAME }}
-          name: Chess Clock ${{ steps.version.outputs.VERSION }}
+          name: TiltMate ${{ steps.version.outputs.VERSION }}
           body: |
-            ## Chess Clock v${{ steps.version.outputs.VERSION }}
+            ## TiltMate v${{ steps.version.outputs.VERSION }}
 
             ### 📱 Download
             Download the APK file below and install on your Android device.
@@ -98,7 +98,7 @@ jobs:
             ${{ steps.changelog.outputs.CHANGELOG }}
 
             ### 📦 Installation
-            1. Download `linuxswords-ChessClock-release.apk`
+            1. Download `linuxswords-TiltMate-release.apk`
             2. Enable "Install from unknown sources" in Android settings
             3. Open the APK file and install
 
@@ -114,13 +114,13 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            app/build/outputs/apk/release/linuxswords-ChessClock-release.apk
+            app/build/outputs/apk/release/linuxswords-TiltMate-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: linuxswords-ChessClock-release-v${{ steps.version.outputs.VERSION }}
-          path: app/build/outputs/apk/release/linuxswords-ChessClock-release.apk
+          name: linuxswords-TiltMate-release-v${{ steps.version.outputs.VERSION }}
+          path: app/build/outputs/apk/release/linuxswords-TiltMate-release.apk
           retention-days: 90

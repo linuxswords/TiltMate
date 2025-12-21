@@ -2,7 +2,7 @@ package org.linuxswords.games.chessclock.time;
 
 import android.graphics.Color;
 import android.widget.TextView;
-import org.linuxswords.games.chessclock.R;
+import org.linuxswords.games.tiltmate.R;
 
 public class PlayerClock
 {

@@ -1,4 +1,4 @@
-# Chess Clock - Makefile
+# TiltMate - Makefile
 #
 # Prerequisites:
 #   - Java Development Kit (JDK) 17 or higher
@@ -29,7 +29,7 @@ NC := \033[0m # No Color
 ##@ General
 
 help: ## Display this help message
-	@echo "$(CYAN)Chess Clock - Available Make Targets$(NC)"
+	@echo "$(CYAN)TiltMate - Available Make Targets$(NC)"
 	@echo ""
 	@awk 'BEGIN {FS = ":.*##"; printf "Usage:\n  make $(CYAN)<target>$(NC)\n"} \
 		/^[a-zA-Z_-]+:.*?##/ { printf "  $(CYAN)%-20s$(NC) %s\n", $$1, $$2 } \
@@ -99,13 +99,13 @@ build-debug: check-env ## Build debug APK
 	@echo "$(CYAN)Building debug APK...$(NC)"
 	./gradlew assembleDebug --console=plain
 	@echo "$(GREEN)Debug APK built successfully!$(NC)"
-	@echo "$(CYAN)Location:$(NC) app/build/outputs/apk/debug/linuxswords-ChessClock-debug.apk"
+	@echo "$(CYAN)Location:$(NC) app/build/outputs/apk/debug/linuxswords-TiltMate-debug.apk"
 
 build-release: check-env ## Build release APK
 	@echo "$(CYAN)Building release APK...$(NC)"
 	./gradlew assembleRelease --console=plain
 	@echo "$(GREEN)Release APK built successfully!$(NC)"
-	@echo "$(CYAN)Location:$(NC) app/build/outputs/apk/release/linuxswords-ChessClock-release.apk"
+	@echo "$(CYAN)Location:$(NC) app/build/outputs/apk/release/linuxswords-TiltMate-release.apk"
 
 assemble: check-env ## Assemble all variants
 	@echo "$(CYAN)Assembling all APK variants...$(NC)"
@@ -192,7 +192,7 @@ release-push: ## Push latest tag to trigger release
 	echo "$(CYAN)Pushing tag $$LATEST_TAG to trigger release...$(NC)"; \
 	git push origin $$LATEST_TAG; \
 	echo "$(GREEN)Tag pushed! Release workflow starting...$(NC)"; \
-	echo "View at: https://github.com/linuxswords/ChessClock/actions"
+	echo "View at: https://github.com/linuxswords/TiltMate/actions"
 
 release-list: ## List all releases
 	@echo "$(CYAN)Releases:$(NC)"
@@ -200,14 +200,14 @@ release-list: ## List all releases
 		gh release list; \
 	else \
 		echo "$(YELLOW)GitHub CLI (gh) not installed$(NC)"; \
-		echo "View at: https://github.com/linuxswords/ChessClock/releases"; \
+		echo "View at: https://github.com/linuxswords/TiltMate/releases"; \
 	fi
 
 release-view: ## View latest release
 	@if command -v gh > /dev/null 2>&1; then \
 		gh release view --web; \
 	else \
-		echo "$(CYAN)Latest release:$(NC) https://github.com/linuxswords/ChessClock/releases/latest"; \
+		echo "$(CYAN)Latest release:$(NC) https://github.com/linuxswords/TiltMate/releases/latest"; \
 	fi
 
 ##@ CI/CD
@@ -219,7 +219,7 @@ ci-status: ## Check GitHub Actions workflow status (requires gh CLI)
 	else \
 		echo "$(YELLOW)GitHub CLI (gh) not installed$(NC)"; \
 		echo "Install: https://cli.github.com/"; \
-		echo "Or view status at: https://github.com/linuxswords/ChessClock/actions"; \
+		echo "Or view status at: https://github.com/linuxswords/TiltMate/actions"; \
 	fi
 
 ci-view: ## Open GitHub Actions in browser
@@ -228,7 +228,7 @@ ci-view: ## Open GitHub Actions in browser
 		gh workflow view android-ci.yml --web; \
 	else \
 		echo "$(YELLOW)GitHub CLI (gh) not installed$(NC)"; \
-		echo "View at: https://github.com/linuxswords/ChessClock/actions"; \
+		echo "View at: https://github.com/linuxswords/TiltMate/actions"; \
 	fi
 
 ci-logs: ## View latest CI run logs (requires gh CLI)
@@ -244,7 +244,7 @@ ci-logs: ## View latest CI run logs (requires gh CLI)
 
 info: ## Display project information
 	@echo "$(CYAN)Project Information:$(NC)"
-	@echo "  Name: Chess Clock"
+	@echo "  Name: TiltMate"
 	@echo "  Type: Android Application"
 	@echo "  Language: Java"
 	@echo "  Build System: Gradle $(shell ./gradlew --version | grep Gradle | cut -d' ' -f2)"

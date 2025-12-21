@@ -32,7 +32,7 @@
 
 ### Method 2: Manual Trigger
 
-1. Go to [Actions → Release](https://github.com/linuxswords/ChessClock/actions/workflows/release.yml)
+1. Go to [Actions → Release](https://github.com/linuxswords/TiltMate/actions/workflows/release.yml)
 2. Click "Run workflow"
 3. Enter version number (e.g., `1.1.0`)
 4. Click "Run workflow"
@@ -49,7 +49,7 @@ Tests → Lint → Build Release APK → Create Release → Upload APK
 
 The automated release includes:
 
-- **APK Download** - `linuxswords-ChessClock-release.apk`
+- **APK Download** - `linuxswords-TiltMate-release.apk`
 - **Version Info** - Version number and build details
 - **Changelog** - Commits since last release
 - **Installation Instructions** - How to install on Android
@@ -81,8 +81,8 @@ Follow [Semantic Versioning](https://semver.org/):
 
 ## View Releases
 
-- **All releases**: https://github.com/linuxswords/ChessClock/releases
-- **Latest release**: https://github.com/linuxswords/ChessClock/releases/latest
+- **All releases**: https://github.com/linuxswords/TiltMate/releases
+- **Latest release**: https://github.com/linuxswords/TiltMate/releases/latest
 
 ## Example Release Commands
 
@@ -108,6 +108,6 @@ git push origin :refs/tags/v1.0.0
 Add these badges to show release info:
 
 ```markdown
-[![Release](https://img.shields.io/github/v/release/linuxswords/ChessClock)](https://github.com/linuxswords/ChessClock/releases/latest)
-[![Downloads](https://img.shields.io/github/downloads/linuxswords/ChessClock/total)](https://github.com/linuxswords/ChessClock/releases)
+[![Release](https://img.shields.io/github/v/release/linuxswords/TiltMate)](https://github.com/linuxswords/TiltMate/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/linuxswords/TiltMate/total)](https://github.com/linuxswords/TiltMate/releases)
 ```

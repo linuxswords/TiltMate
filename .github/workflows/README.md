@@ -1,7 +1,7 @@
 # GitHub Actions Workflows
 
-[![Android CI](https://github.com/linuxswords/ChessClock/actions/workflows/android-ci.yml/badge.svg)](https://github.com/linuxswords/ChessClock/actions/workflows/android-ci.yml)
-[![Release](https://img.shields.io/github/v/release/linuxswords/ChessClock)](https://github.com/linuxswords/ChessClock/releases/latest)
+[![Android CI](https://github.com/linuxswords/TiltMate/actions/workflows/android-ci.yml/badge.svg)](https://github.com/linuxswords/TiltMate/actions/workflows/android-ci.yml)
+[![Release](https://img.shields.io/github/v/release/linuxswords/TiltMate)](https://github.com/linuxswords/TiltMate/releases/latest)
 
 ## Workflows
 
@@ -22,7 +22,7 @@ Lint (checks)     ─┘
 **Artifacts** (7-day retention):
 - `test-reports` - HTML test reports
 - `lint-reports` - Lint analysis
-- `linuxswords-ChessClock-debug` - Debug APK
+- `linuxswords-TiltMate-debug` - Debug APK
 
 ## Usage
 
@@ -34,7 +34,7 @@ make ci-view        # Open in browser
 make ci-logs        # View latest logs
 
 # Or visit
-# https://github.com/linuxswords/ChessClock/actions
+# https://github.com/linuxswords/TiltMate/actions
 ```
 
 ### Download Artifacts
@@ -74,7 +74,7 @@ make build          # Build only
 ## Badge
 
 ```markdown
-[![Android CI](https://github.com/linuxswords/ChessClock/actions/workflows/android-ci.yml/badge.svg)](https://github.com/linuxswords/ChessClock/actions/workflows/android-ci.yml)
+[![Android CI](https://github.com/linuxswords/TiltMate/actions/workflows/android-ci.yml/badge.svg)](https://github.com/linuxswords/TiltMate/actions/workflows/android-ci.yml)
 ```
 
 - 🟢 Green = Passing
@@ -96,7 +96,7 @@ Test → Lint → Build Release APK → Create GitHub Release → Upload APK
 
 **Creates:**
 - GitHub Release page with changelog
-- APK download (`linuxswords-ChessClock-release.apk`)
+- APK download (`linuxswords-TiltMate-release.apk`)
 - Version tags and release notes
 
 **Usage:**

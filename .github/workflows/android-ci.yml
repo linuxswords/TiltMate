@@ -99,11 +99,11 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: linuxswords-ChessClock-debug
-          path: app/build/outputs/apk/debug/linuxswords-ChessClock-debug.apk
+          name: linuxswords-TiltMate-debug
+          path: app/build/outputs/apk/debug/linuxswords-TiltMate-debug.apk
           retention-days: 7
 
       - name: Get APK info
         run: |
-          echo "APK Size: $(du -h app/build/outputs/apk/debug/linuxswords-ChessClock-debug.apk | cut -f1)"
-          echo "APK Path: app/build/outputs/apk/debug/linuxswords-ChessClock-debug.apk"
+          echo "APK Size: $(du -h app/build/outputs/apk/debug/linuxswords-TiltMate-debug.apk | cut -f1)"
+          echo "APK Path: app/build/outputs/apk/debug/linuxswords-TiltMate-debug.apk"
