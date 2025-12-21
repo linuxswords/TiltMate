@@ -56,6 +56,7 @@ make help                   # All commands
 
 - [TESTING.md](TESTING.md) - Testing guide
 - [RELEASE.md](RELEASE.md) - Release instructions
+- [AAB-BUILD.md](AAB-BUILD.md) - Android App Bundle build guide
 
 ## ideas
 

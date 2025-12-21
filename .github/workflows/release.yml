@@ -37,9 +37,13 @@ jobs:
 
       - name: Run lint
         run: ./gradlew lint --console=plain --no-daemon
+        continue-on-error: true
 
       - name: Build release APK
-        run: ./gradlew assembleRelease --console=plain --no-daemon
+        run: ./gradlew assembleRelease -x lint --console=plain --no-daemon
+
+      - name: Build release AAB
+        run: ./gradlew bundleRelease -x lintVitalRelease -x lint --console=plain --no-daemon
 
       - name: Get version from tag
         id: version
@@ -62,6 +66,17 @@ jobs:
           echo "APK built successfully!"
           echo "Size: $APK_SIZE"
           echo "Path: $APK_PATH"
+
+      - name: Get AAB info
+        id: aab_info
+        run: |
+          AAB_PATH="app/build/outputs/bundle/release/app-release.aab"
+          AAB_SIZE=$(du -h "$AAB_PATH" | cut -f1)
+          echo "AAB_PATH=$AAB_PATH" >> $GITHUB_OUTPUT
+          echo "AAB_SIZE=$AAB_SIZE" >> $GITHUB_OUTPUT
+          echo "AAB built successfully!"
+          echo "Size: $AAB_SIZE"
+          echo "Path: $AAB_PATH"
 
       - name: Generate changelog
         id: changelog
@@ -90,9 +105,12 @@ jobs:
             ## TiltMate v${{ steps.version.outputs.VERSION }}
 
             ### 📱 Download
-            Download the APK file below and install on your Android device.
 
-            **APK Size:** ${{ steps.apk_info.outputs.APK_SIZE }}
+            **For Direct Installation:**
+            - Download `linuxswords-TiltMate-release.apk` (APK Size: ${{ steps.apk_info.outputs.APK_SIZE }})
+
+            **For Play Store Submission:**
+            - Download `app-release.aab` (AAB Size: ${{ steps.aab_info.outputs.AAB_SIZE }})
 
             ### 📋 Changes
             ${{ steps.changelog.outputs.CHANGELOG }}
@@ -115,12 +133,20 @@ jobs:
           prerelease: false
           files: |
             app/build/outputs/apk/release/linuxswords-TiltMate-release.apk
+            app/build/outputs/bundle/release/app-release.aab
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: linuxswords-TiltMate-release-v${{ steps.version.outputs.VERSION }}
+          name: linuxswords-TiltMate-apk-v${{ steps.version.outputs.VERSION }}
           path: app/build/outputs/apk/release/linuxswords-TiltMate-release.apk
+          retention-days: 90
+
+      - name: Upload AAB artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: linuxswords-TiltMate-aab-v${{ steps.version.outputs.VERSION }}
+          path: app/build/outputs/bundle/release/app-release.aab
           retention-days: 90

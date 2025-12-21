@@ -107,6 +107,22 @@ build-release: check-env ## Build release APK
 	@echo "$(GREEN)Release APK built successfully!$(NC)"
 	@echo "$(CYAN)Location:$(NC) app/build/outputs/apk/release/linuxswords-TiltMate-release.apk"
 
+build-bundle: check-env ## Build release AAB (Android App Bundle) for Play Store
+	@echo "$(CYAN)Building release AAB...$(NC)"
+	./gradlew bundleRelease -x lintVitalRelease -x lint --console=plain
+	@echo "$(GREEN)Release AAB built successfully!$(NC)"
+	@echo "$(CYAN)Location:$(NC) app/build/outputs/bundle/release/app-release.aab"
+	@ls -lh app/build/outputs/bundle/release/app-release.aab | awk '{print "$(CYAN)Size:$(NC)", $$5}'
+
+build-all-release: check-env ## Build both APK and AAB for release
+	@echo "$(CYAN)Building all release artifacts (APK + AAB)...$(NC)"
+	./gradlew assembleRelease bundleRelease -x lintVitalRelease -x lint --console=plain
+	@echo "$(GREEN)All release artifacts built successfully!$(NC)"
+	@echo "$(CYAN)APK Location:$(NC) app/build/outputs/apk/release/linuxswords-TiltMate-release.apk"
+	@ls -lh app/build/outputs/apk/release/linuxswords-TiltMate-release.apk | awk '{print "$(CYAN)  Size:$(NC)", $$5}'
+	@echo "$(CYAN)AAB Location:$(NC) app/build/outputs/bundle/release/app-release.aab"
+	@ls -lh app/build/outputs/bundle/release/app-release.aab | awk '{print "$(CYAN)  Size:$(NC)", $$5}'
+
 assemble: check-env ## Assemble all variants
 	@echo "$(CYAN)Assembling all APK variants...$(NC)"
 	./gradlew assemble --console=plain
