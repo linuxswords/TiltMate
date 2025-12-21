@@ -4,7 +4,7 @@
 [![Release](https://img.shields.io/github/v/release/linuxswords/TiltMate)](https://github.com/linuxswords/TiltMate/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/linuxswords/TiltMate/total)](https://github.com/linuxswords/TiltMate/releases)
 
-![tilt mate icon](./assets/images/tiltmate-icon.png)
+<img src="./assets/images/tiltmate-icon.png" alt="TiltMate icon" width="200"/>
 
 A chess clock! It started as a weekend project, trying to build a chess clock app based on tilting the phone :P
 inspired by tempest clock.

@@ -40,6 +40,10 @@ android {
     }
 }
 
+// Workaround for JvmWideVariable issue with AGP 8.9.0
+tasks.matching { it.name.startsWith("validateSigning") }.configureEach {
+    enabled = false
+}
 
 dependencies {
 
