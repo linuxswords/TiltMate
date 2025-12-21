@@ -1,4 +1,4 @@
-package org.linuxswords.games.chessclock.listener;
+package org.linuxswords.games.tiltmate.listener;
 
 import android.view.View;
 import android.view.View.OnClickListener;

@@ -1,4 +1,4 @@
-package org.linuxswords.games.chessclock.time;
+package org.linuxswords.games.tiltmate.time;
 
 import android.graphics.Color;
 import android.widget.TextView;

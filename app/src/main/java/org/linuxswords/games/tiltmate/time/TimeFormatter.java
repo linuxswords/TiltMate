@@ -1,4 +1,4 @@
-package org.linuxswords.games.chessclock.time;
+package org.linuxswords.games.tiltmate.time;
 
 import java.util.concurrent.TimeUnit;
 

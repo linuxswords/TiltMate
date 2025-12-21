@@ -1,4 +1,4 @@
-package org.linuxswords.games.chessclock;
+package org.linuxswords.games.tiltmate;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,11 +7,12 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
-import org.linuxswords.games.chessclock.listener.DoubleClickListener;
-import org.linuxswords.games.chessclock.sensor.TiltSensor;
-import org.linuxswords.games.chessclock.sensor.TiltSensor.TiltListener;
-import org.linuxswords.games.chessclock.time.PlayerClock;
-import org.linuxswords.games.chessclock.time.TimeSettingsManager;
+import org.linuxswords.games.tiltmate.R;
+import org.linuxswords.games.tiltmate.listener.DoubleClickListener;
+import org.linuxswords.games.tiltmate.sensor.TiltSensor;
+import org.linuxswords.games.tiltmate.sensor.TiltSensor.TiltListener;
+import org.linuxswords.games.tiltmate.time.PlayerClock;
+import org.linuxswords.games.tiltmate.time.TimeSettingsManager;
 
 public class MainActivity extends Activity implements TiltListener
 {

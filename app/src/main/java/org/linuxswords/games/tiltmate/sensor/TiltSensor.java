@@ -1,4 +1,4 @@
-package org.linuxswords.games.chessclock.sensor;
+package org.linuxswords.games.tiltmate.sensor;
 
 import android.content.Context;
 import android.hardware.Sensor;

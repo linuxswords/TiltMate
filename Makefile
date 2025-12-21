@@ -252,8 +252,8 @@ info: ## Display project information
 	@echo "  Target SDK: 36 (Android 15)"
 	@echo ""
 	@echo "$(CYAN)Project Structure:$(NC)"
-	@echo "  Source: app/src/main/java/org/linuxswords/games/chessclock/"
-	@echo "  Tests: app/src/test/java/org/linuxswords/games/chessclock/"
+	@echo "  Source: app/src/main/java/org/linuxswords/games/tiltmate/"
+	@echo "  Tests: app/src/test/java/org/linuxswords/games/tiltmate/"
 	@echo "  Layouts: app/src/main/res/layout/"
 
 dependencies: check-env ## Show project dependencies

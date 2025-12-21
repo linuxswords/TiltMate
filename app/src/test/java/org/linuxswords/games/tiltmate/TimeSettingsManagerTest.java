@@ -1,11 +1,11 @@
-package org.linuxswords.games.chessclock;
+package org.linuxswords.games.tiltmate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.linuxswords.games.chessclock.time.TimeSettings;
-import org.linuxswords.games.chessclock.time.TimeSettingsManager;
+import org.linuxswords.games.tiltmate.time.TimeSettings;
+import org.linuxswords.games.tiltmate.time.TimeSettingsManager;
 
 
 class TimeSettingsManagerTest

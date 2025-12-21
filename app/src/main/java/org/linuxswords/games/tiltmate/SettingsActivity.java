@@ -1,11 +1,12 @@
-package org.linuxswords.games.chessclock;
+package org.linuxswords.games.tiltmate;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.WindowManager;
-import org.linuxswords.games.chessclock.time.TimeSettings;
-import org.linuxswords.games.chessclock.time.TimeSettingsManager;
+import org.linuxswords.games.tiltmate.R;
+import org.linuxswords.games.tiltmate.time.TimeSettings;
+import org.linuxswords.games.tiltmate.time.TimeSettingsManager;
 
 public class SettingsActivity extends Activity
 {

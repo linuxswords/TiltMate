@@ -3,15 +3,17 @@ plugins {
 }
 
 
-tasks.withType(Test) { useJUnitPlatform() }
+tasks.withType(Test) {
+    useJUnitPlatform()
+}
 
 android {
-    compileSdk 36
+    compileSdk = 35
 
     defaultConfig {
-        applicationId "org.linuxswords.games.chessclock"
-        minSdk 21
-        targetSdk 36
+        applicationId "org.linuxswords.games.tiltmate"
+        minSdk = 21
+        targetSdk = 35
         versionCode 1
         versionName "1.0"
 
@@ -20,16 +22,15 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled = false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.debug
         }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
-    namespace 'org.linuxswords.games.tiltmate'
+    namespace = 'org.linuxswords.games.tiltmate'
 
     applicationVariants.all { variant ->
         variant.outputs.all {
@@ -54,5 +55,6 @@ dependencies {
     testImplementation('org.assertj:assertj-core:3.26.3')
 
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.11.3'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 

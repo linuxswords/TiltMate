@@ -1,4 +1,4 @@
-package org.linuxswords.games.chessclock;
+package org.linuxswords.games.tiltmate;
 
 /**
  * Example local unit test, which will execute on the development machine (host).

@@ -1,4 +1,4 @@
-package org.linuxswords.games.chessclock;
+package org.linuxswords.games.tiltmate;
 
 import android.content.Context;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -22,6 +22,6 @@ public class ExampleInstrumentedTest
     {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("org.linuxswords.games.chessclock", appContext.getPackageName());
+        assertEquals("org.linuxswords.games.tiltmate", appContext.getPackageName());
     }
 }

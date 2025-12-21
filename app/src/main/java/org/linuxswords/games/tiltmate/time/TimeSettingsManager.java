@@ -1,4 +1,4 @@
-package org.linuxswords.games.chessclock.time;
+package org.linuxswords.games.tiltmate.time;
 
 public class TimeSettingsManager
 {

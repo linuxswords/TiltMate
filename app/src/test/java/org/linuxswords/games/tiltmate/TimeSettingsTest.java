@@ -1,4 +1,4 @@
-package org.linuxswords.games.chessclock;
+package org.linuxswords.games.tiltmate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.linuxswords.games.chessclock.time.TimeSettings;
+import org.linuxswords.games.tiltmate.time.TimeSettings;
 
 
 class TimeSettingsTest
