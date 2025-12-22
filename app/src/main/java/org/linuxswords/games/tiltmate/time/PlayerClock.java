@@ -9,13 +9,14 @@ public class PlayerClock
     private static final int WARN_COLOR = Color.RED;
     private static final long WARN_THRESH_HOLD_IN_MILLIS = 60L * 1_000L;  // one minute
 
-    private static final TimeSettingsManager timeSettingsManager = TimeSettingsManager.instance();
+    private final TimeSettingsManager timeSettingsManager;
     private final PausableCountDownTimer countDownTimer;
     private final TextView view;
     private final long startTimeInMillis;
 
-    public PlayerClock(TextView view)
+    public PlayerClock(TextView view, TimeSettingsManager timeSettingsManager)
     {
+        this.timeSettingsManager = timeSettingsManager;
         this.startTimeInMillis = timeSettingsManager.getCurrent().minutesAsMilliSeconds();
         this.view = view;
         countDownTimer = new PausableCountDownTimer(startTimeInMillis)

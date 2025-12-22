@@ -44,7 +44,7 @@ public class SettingsActivity extends Activity
 
     private void setTimeAndCloseView(TimeSettings timeSetting)
     {
-        TimeSettingsManager timeSettingsManager = TimeSettingsManager.instance();
+        TimeSettingsManager timeSettingsManager = TimeSettingsManager.instance(this);
         timeSettingsManager.setCurrent(timeSetting);
         startActivity(new Intent(this, MainActivity.class));
     }

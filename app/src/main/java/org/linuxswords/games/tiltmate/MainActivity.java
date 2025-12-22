@@ -33,13 +33,15 @@ public class MainActivity extends Activity implements TiltListener
         TextView leftClockView = findViewById(R.id.clockLeft);
         TextView rightClockView = findViewById(R.id.clockRight);
 
-        leftClock = new PlayerClock(leftClockView).showStartTime();
-        rightClock = new PlayerClock(rightClockView).showStartTime();
+        TimeSettingsManager timeSettingsManager = TimeSettingsManager.instance(this);
+
+        leftClock = new PlayerClock(leftClockView, timeSettingsManager).showStartTime();
+        rightClock = new PlayerClock(rightClockView, timeSettingsManager).showStartTime();
 
         tiltSensor = new TiltSensor(this);
         tiltSensor.setListener(this);
 
-        this.<TextView>findViewById(R.id.timeSettingDisplay).setText(TimeSettingsManager.instance().getCurrent().getLabel());
+        this.<TextView>findViewById(R.id.timeSettingDisplay).setText(timeSettingsManager.getCurrent().getLabel());
 
         // pause on a single tap, reset on double tap, show settings on a long tap
         findViewById(R.id.parent).setOnClickListener(new DoubleClickListener()
