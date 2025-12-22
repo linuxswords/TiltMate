@@ -28,6 +28,10 @@ Download the APK and install on your Android device (Android 5.0+).
   - Long press to access settings
 - **Multiple time controls**: 3+0, 3+5, 5+0, 5+5, 10+0, 10+5, 15+0, 15+5
 - **Increment support**: Fischer chess clock with increment per move
+- **Persistent settings**: Your time control preference is saved automatically
+- **Advanced settings**:
+  - Clock ticking sound (optional, disabled by default)
+  - Adjustable tilt sensitivity (Low/Medium/High)
 - **Clean UI**: Fullscreen, no buttons on main clock screen
 
 ## Development
@@ -60,8 +64,8 @@ make help                   # All commands
 
 ## ideas
 
-- [ ] store your last time setting (profile)
-- [ ] settings: add sound effects
+- [x] store your last time setting (profile)
+- [x] settings: add sound effects
 - [ ] analog clock?
 - [ ] simple tap could activate meta info like current time setting/info etc? But I like the single tap pause function
 - [ ] show number of moves made
@@ -77,3 +81,9 @@ make help                   # All commands
 - [x] Clock-UI without buttons
 - [x] use alpha instead of background change when tilting
 - [x] ~~settings: configure tilting threshold~~ figured out a better way to measure tilts
+
+## Credits
+
+### Sound Effects
+
+- **Clock Ticking Sound**: [Lux Kitchen Timer.wav](https://freesound.org/s/670889/) by [knufds](https://freesound.org/people/knufds/) - Licensed under [Creative Commons 0 (CC0)](https://creativecommons.org/publicdomain/zero/1.0/)

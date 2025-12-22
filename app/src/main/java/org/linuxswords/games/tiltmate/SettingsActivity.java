@@ -3,6 +3,7 @@ package org.linuxswords.games.tiltmate;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.WindowManager;
 import org.linuxswords.games.tiltmate.R;
 import org.linuxswords.games.tiltmate.time.TimeSettings;
@@ -10,21 +11,47 @@ import org.linuxswords.games.tiltmate.time.TimeSettingsManager;
 
 public class SettingsActivity extends Activity
 {
+    private static final String TAG = "SettingsActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate called");
         setContentView(R.layout.activity_settings);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         setupTimeSettingsButtons();
 
+        // advanced settings
+        android.view.View advancedButton = findViewById(R.id.advancedSettingsButton);
+        Log.d(TAG, "advancedSettingsButton found: " + (advancedButton != null));
+        if (advancedButton != null) {
+            advancedButton.setOnClickListener(v -> {
+                Log.d(TAG, "Advanced settings button clicked");
+                startActivity(new Intent(this, AdvancedSettingsActivity.class));
+            });
+        }
+
         // cancel
-        findViewById(R.id.settingsCancelButton).setOnClickListener(v -> startActivity(new Intent(this, MainActivity.class)));
+        android.view.View cancelButton = findViewById(R.id.settingsCancelButton);
+        Log.d(TAG, "settingsCancelButton found: " + (cancelButton != null));
+        if (cancelButton != null) {
+            cancelButton.setOnClickListener(v -> {
+                Log.d(TAG, "Cancel button clicked");
+                startActivity(new Intent(this, MainActivity.class));
+            });
+        }
 
         // exit
-        findViewById(R.id.exitButton).setOnClickListener(v -> this.finishAffinity());
+        android.view.View exitButton = findViewById(R.id.exitButton);
+        Log.d(TAG, "exitButton found: " + (exitButton != null));
+        if (exitButton != null) {
+            exitButton.setOnClickListener(v -> {
+                Log.d(TAG, "Exit button clicked");
+                this.finishAffinity();
+            });
+        }
     }
 
     private void setupTimeSettingsButtons()

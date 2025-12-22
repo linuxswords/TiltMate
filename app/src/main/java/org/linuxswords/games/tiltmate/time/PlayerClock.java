@@ -6,6 +6,11 @@ import org.linuxswords.games.tiltmate.R;
 
 public class PlayerClock
 {
+    public interface ClockFinishListener
+    {
+        void onClockFinished(PlayerClock clock);
+    }
+
     private static final int WARN_COLOR = Color.RED;
     private static final long WARN_THRESH_HOLD_IN_MILLIS = 60L * 1_000L;  // one minute
 
@@ -13,6 +18,7 @@ public class PlayerClock
     private final PausableCountDownTimer countDownTimer;
     private final TextView view;
     private final long startTimeInMillis;
+    private ClockFinishListener finishListener;
 
     public PlayerClock(TextView view, TimeSettingsManager timeSettingsManager)
     {
@@ -38,10 +44,18 @@ public class PlayerClock
             {
                 view.setTextColor(WARN_COLOR);
                 view.setText(R.string.lostMessage);
+                // Notify listener that time has run out
+                if (finishListener != null) {
+                    finishListener.onClockFinished(PlayerClock.this);
+                }
             }
         };
     }
 
+    public void setFinishListener(ClockFinishListener listener)
+    {
+        this.finishListener = listener;
+    }
 
     public PlayerClock showStartTime()
     {

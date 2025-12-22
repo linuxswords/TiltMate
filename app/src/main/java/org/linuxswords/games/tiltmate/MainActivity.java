@@ -9,12 +9,14 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import org.linuxswords.games.tiltmate.R;
 import org.linuxswords.games.tiltmate.listener.DoubleClickListener;
+import org.linuxswords.games.tiltmate.preferences.AppPreferences;
 import org.linuxswords.games.tiltmate.sensor.TiltSensor;
 import org.linuxswords.games.tiltmate.sensor.TiltSensor.TiltListener;
+import org.linuxswords.games.tiltmate.sound.TickingSoundManager;
 import org.linuxswords.games.tiltmate.time.PlayerClock;
 import org.linuxswords.games.tiltmate.time.TimeSettingsManager;
 
-public class MainActivity extends Activity implements TiltListener
+public class MainActivity extends Activity implements TiltListener, PlayerClock.ClockFinishListener
 {
     private static final String TAG = "MainActivity";
     private int currentTiltDegree = 0;
@@ -22,6 +24,8 @@ public class MainActivity extends Activity implements TiltListener
     private PlayerClock leftClock;
     private PlayerClock rightClock;
     private TiltSensor tiltSensor;
+    private AppPreferences preferences;
+    private TickingSoundManager tickingSound;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -34,12 +38,23 @@ public class MainActivity extends Activity implements TiltListener
         TextView rightClockView = findViewById(R.id.clockRight);
 
         TimeSettingsManager timeSettingsManager = TimeSettingsManager.instance(this);
+        preferences = new AppPreferences(this);
 
         leftClock = new PlayerClock(leftClockView, timeSettingsManager).showStartTime();
         rightClock = new PlayerClock(rightClockView, timeSettingsManager).showStartTime();
 
+        // Set finish listener on both clocks to stop ticking when time runs out
+        leftClock.setFinishListener(this);
+        rightClock.setFinishListener(this);
+
         tiltSensor = new TiltSensor(this);
         tiltSensor.setListener(this);
+        // Load and apply sensitivity setting
+        tiltSensor.setSensitivity(preferences.getTiltSensitivity());
+
+        // Initialize ticking sound
+        tickingSound = new TickingSoundManager(this);
+        tickingSound.setEnabled(preferences.isTickingEnabled());
 
         this.<TextView>findViewById(R.id.timeSettingDisplay).setText(timeSettingsManager.getCurrent().getLabel());
 
@@ -71,6 +86,8 @@ public class MainActivity extends Activity implements TiltListener
     {
         toActivate.start();
         toPause.pause();
+        // Ticking continues while one clock is running
+        tickingSound.start();
     }
 
 
@@ -78,12 +95,16 @@ public class MainActivity extends Activity implements TiltListener
     {
         leftClock.pause();
         rightClock.pause();
+        // Stop ticking when both clocks are paused
+        tickingSound.stop();
     }
 
     private void restartAllClocks()
     {
         leftClock.restart().showStartTime();
         rightClock.restart().showStartTime();
+        // Stop ticking on restart (clocks are reset but not running)
+        tickingSound.stop();
     }
 
 
@@ -91,7 +112,12 @@ public class MainActivity extends Activity implements TiltListener
     protected void onResume()
     {
         super.onResume();
+        // Reload sensitivity in case it was changed in settings
+        tiltSensor.setSensitivity(preferences.getTiltSensitivity());
         tiltSensor.register();
+
+        // Reload ticking setting in case it was changed
+        tickingSound.setEnabled(preferences.isTickingEnabled());
     }
 
     @Override
@@ -99,6 +125,18 @@ public class MainActivity extends Activity implements TiltListener
     {
         super.onPause();
         tiltSensor.unregister();
+        // Stop ticking when app is paused
+        tickingSound.stop();
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        // Release sound resources
+        if (tickingSound != null) {
+            tickingSound.release();
+        }
     }
 
     @Override
@@ -120,5 +158,13 @@ public class MainActivity extends Activity implements TiltListener
             }
         }
 
+    }
+
+    @Override
+    public void onClockFinished(PlayerClock clock)
+    {
+        // Stop ticking sound when time runs out
+        tickingSound.stop();
+        Log.d(TAG, "Clock finished - ticking sound stopped");
     }
 }

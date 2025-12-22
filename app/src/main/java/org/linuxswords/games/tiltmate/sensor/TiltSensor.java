@@ -23,13 +23,42 @@ public class TiltSensor implements SensorEventListener
         tiltListener = l;
     }
 
+    /**
+     * Set tilt sensitivity level
+     * @param level 0 = Low (20°), 1 = Medium (10°), 2 = High (5°)
+     */
+    public void setSensitivity(int level)
+    {
+        switch (level) {
+            case 0:
+                sensitivityThreshold = THRESHOLD_LOW;
+                break;
+            case 1:
+                sensitivityThreshold = THRESHOLD_MEDIUM;
+                break;
+            case 2:
+                sensitivityThreshold = THRESHOLD_HIGH;
+                break;
+            default:
+                Log.w(TAG, "Invalid sensitivity level " + level + ", using medium");
+                sensitivityThreshold = THRESHOLD_MEDIUM;
+        }
+        Log.d(TAG, "Sensitivity set to " + level + " (threshold: " + sensitivityThreshold + "°)");
+    }
+
     private static final String TAG = "TiltSensor";
+
+    // Sensitivity thresholds in degrees
+    private static final int THRESHOLD_LOW = 20;      // Low sensitivity (0)
+    private static final int THRESHOLD_MEDIUM = 10;   // Medium sensitivity (1)
+    private static final int THRESHOLD_HIGH = 5;      // High sensitivity (2)
 
     private final SensorManager sensorManager;
     private final Sensor accelerometer;
     private final Sensor magnetometer;
     private float[] mGravity;
     private float[] mGeomagnetic;
+    private int sensitivityThreshold = THRESHOLD_MEDIUM; // Default: medium
 
     // create constructor with context as argument
     public TiltSensor(Context context)
@@ -84,7 +113,14 @@ public class TiltSensor implements SensorEventListener
         // Orientation contains: azimuth, pitch and roll - we'll use pitch
         float roll = orientation[1];
         int rollDeg = (int) Math.round(Math.toDegrees(roll));
-        tiltListener.onTilt(rollDeg);
+
+        // Only notify listener if tilt exceeds the sensitivity threshold
+        if (Math.abs(rollDeg) >= sensitivityThreshold) {
+            tiltListener.onTilt(rollDeg);
+        } else {
+            // Send 0 when below threshold (device is flat)
+            tiltListener.onTilt(0);
+        }
     }
 
     @Override
