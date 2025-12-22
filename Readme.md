@@ -9,7 +9,7 @@
 A chess clock! It started as a weekend project, trying to build a chess clock app based on tilting the phone :P
 inspired by tempest clock.
 
-A chess clock that works by tilting your phone. Put your phone onto something that can be tilted and instead of pressing a button on your chess clock.
+Put your phone onto something that can be tilted and instead of pressing a button on your chess clock.
 
 There are 3D prints available and will be part of the project in the future.
 
