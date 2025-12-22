@@ -108,11 +108,11 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: linuxswords-TiltMate-debug
-          path: app/build/outputs/apk/debug/linuxswords-TiltMate-debug.apk
+          name: TiltMate-debug
+          path: app/build/outputs/apk/debug/TiltMate-debug.apk
           retention-days: 7
 
       - name: Get APK info
         run: |
-          echo "APK Size: $(du -h app/build/outputs/apk/debug/linuxswords-TiltMate-debug.apk | cut -f1)"
-          echo "APK Path: app/build/outputs/apk/debug/linuxswords-TiltMate-debug.apk"
+          echo "APK Size: $(du -h app/build/outputs/apk/debug/TiltMate-debug.apk | cut -f1)"
+          echo "APK Path: app/build/outputs/apk/debug/TiltMate-debug.apk"

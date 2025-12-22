@@ -114,17 +114,13 @@ jobs:
 
             ### 📱 Download
 
-            **For Direct Installation:**
-            - Download `TiltMate-release.apk` (APK Size: ${{ steps.apk_info.outputs.APK_SIZE }})
-
-            **For Play Store Submission:**
-            - Download `app-release.aab` (AAB Size: ${{ steps.aab_info.outputs.AAB_SIZE }})
+            Download `TiltMate-release.apk` (${{ steps.apk_info.outputs.APK_SIZE }})
 
             ### 📋 Changes
             ${{ steps.changelog.outputs.CHANGELOG }}
 
             ### 📦 Installation
-            1. Download `TiltMate-release.apk`
+            1. Download `TiltMate-release.apk` below
             2. Enable "Install from unknown sources" in Android settings
             3. Open the APK file and install
 
@@ -137,11 +133,12 @@ jobs:
             ---
             **Min Android Version:** 5.0 (API 21)
             **Target Android Version:** 15 (API 36)
+
+            **Note:** AAB bundle is available as a build artifact for Play Store submissions.
           draft: false
           prerelease: false
           files: |
             app/build/outputs/apk/release/TiltMate-release.apk
-            app/build/outputs/bundle/release/app-release.aab
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
