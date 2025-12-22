@@ -29,65 +29,65 @@ NC := \033[0m # No Color
 ##@ General
 
 help: ## Display this help message
-	@echo "$(CYAN)TiltMate - Available Make Targets$(NC)"
+	@echo -e "$(CYAN)TiltMate - Available Make Targets$(NC)"
 	@echo ""
-	@awk 'BEGIN {FS = ":.*##"; printf "Usage:\n  make $(CYAN)<target>$(NC)\n"} \
-		/^[a-zA-Z_-]+:.*?##/ { printf "  $(CYAN)%-20s$(NC) %s\n", $$1, $$2 } \
-		/^##@/ { printf "\n$(YELLOW)%s$(NC)\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
+	@awk 'BEGIN {FS = ":.*##"; printf "Usage:\n  make \033[0;36m<target>\033[0m\n"} \
+		/^[a-zA-Z_-]+:.*?##/ { printf "  \033[0;36m%-20s\033[0m %s\n", $$1, $$2 } \
+		/^##@/ { printf "\n\033[0;33m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 	@echo ""
-	@echo "$(YELLOW)Prerequisites:$(NC)"
+	@echo -e "$(YELLOW)Prerequisites:$(NC)"
 	@echo "  - JDK 17+ (set JAVA_HOME)"
 	@echo "  - Android SDK (set ANDROID_HOME)"
 	@echo "  Run 'make check-env' to verify setup"
 
 check-env: ## Check if required environment variables are set
-	@echo "$(CYAN)Checking environment setup...$(NC)"
+	@echo -e "$(CYAN)Checking environment setup...$(NC)"
 	@if [ -z "$$JAVA_HOME" ]; then \
-		echo "$(RED)✗ JAVA_HOME is not set$(NC)"; \
+		echo -e "$(RED)✗ JAVA_HOME is not set$(NC)"; \
 		echo "  Install JDK 17+ and set JAVA_HOME"; \
 		exit 1; \
 	else \
-		echo "$(GREEN)✓ JAVA_HOME is set: $$JAVA_HOME$(NC)"; \
+		echo -e "$(GREEN)✓ JAVA_HOME is set: $$JAVA_HOME$(NC)"; \
 	fi
 	@if [ -z "$$ANDROID_HOME" ] && [ -z "$$ANDROID_SDK_ROOT" ]; then \
-		echo "$(YELLOW)⚠ ANDROID_HOME is not set (optional for unit tests)$(NC)"; \
+		echo -e "$(YELLOW)⚠ ANDROID_HOME is not set (optional for unit tests)$(NC)"; \
 	else \
-		echo "$(GREEN)✓ ANDROID_HOME is set: $$ANDROID_HOME$(NC)"; \
+		echo -e "$(GREEN)✓ ANDROID_HOME is set: $$ANDROID_HOME$(NC)"; \
 	fi
 	@if [ ! -f "./gradlew" ]; then \
-		echo "$(RED)✗ Gradle wrapper not found$(NC)"; \
+		echo -e "$(RED)✗ Gradle wrapper not found$(NC)"; \
 		exit 1; \
 	else \
-		echo "$(GREEN)✓ Gradle wrapper found$(NC)"; \
+		echo -e "$(GREEN)✓ Gradle wrapper found$(NC)"; \
 	fi
-	@echo "$(GREEN)Environment check passed!$(NC)"
+	@echo -e "$(GREEN)Environment check passed!$(NC)"
 
 ##@ Testing
 
 test: test-unit ## Run all unit tests (default test target)
-	@echo "$(GREEN)All unit tests completed!$(NC)"
+	@echo -e "$(GREEN)All unit tests completed!$(NC)"
 
 test-unit: check-env ## Run unit tests only (no Android device required)
-	@echo "$(CYAN)Running unit tests...$(NC)"
+	@echo -e "$(CYAN)Running unit tests...$(NC)"
 	./gradlew test --console=plain
-	@echo "$(GREEN)Unit tests completed successfully!$(NC)"
+	@echo -e "$(GREEN)Unit tests completed successfully!$(NC)"
 
 test-verbose: check-env ## Run unit tests with verbose output
-	@echo "$(CYAN)Running unit tests with verbose output...$(NC)"
+	@echo -e "$(CYAN)Running unit tests with verbose output...$(NC)"
 	./gradlew test --console=plain --info
 
 test-instrumented: check-env ## Run instrumented tests (requires Android device/emulator)
-	@echo "$(CYAN)Running instrumented tests...$(NC)"
-	@echo "$(YELLOW)Note: Requires a connected Android device or running emulator$(NC)"
+	@echo -e "$(CYAN)Running instrumented tests...$(NC)"
+	@echo -e "$(YELLOW)Note: Requires a connected Android device or running emulator$(NC)"
 	./gradlew connectedAndroidTest --console=plain
 
 test-all: check-env ## Run both unit and instrumented tests
-	@echo "$(CYAN)Running all tests (unit + instrumented)...$(NC)"
+	@echo -e "$(CYAN)Running all tests (unit + instrumented)...$(NC)"
 	./gradlew test connectedAndroidTest --console=plain
-	@echo "$(GREEN)All tests completed!$(NC)"
+	@echo -e "$(GREEN)All tests completed!$(NC)"
 
 test-report: ## Generate and display test report location
-	@echo "$(CYAN)Test reports generated at:$(NC)"
+	@echo -e "$(CYAN)Test reports generated at:$(NC)"
 	@echo "  Unit tests: file://$(PWD)/app/build/reports/tests/testDebugUnitTest/index.html"
 	@echo "  Instrumented: file://$(PWD)/app/build/reports/androidTests/connected/index.html"
 
@@ -96,126 +96,126 @@ test-report: ## Generate and display test report location
 build: build-debug ## Build debug APK (default build target)
 
 build-debug: check-env ## Build debug APK
-	@echo "$(CYAN)Building debug APK...$(NC)"
+	@echo -e "$(CYAN)Building debug APK...$(NC)"
 	./gradlew assembleDebug --console=plain
-	@echo "$(GREEN)Debug APK built successfully!$(NC)"
-	@echo "$(CYAN)Location:$(NC) app/build/outputs/apk/debug/linuxswords-TiltMate-debug.apk"
+	@echo -e "$(GREEN)Debug APK built successfully!$(NC)"
+	@echo -e "$(CYAN)Location:$(NC) app/build/outputs/apk/debug/linuxswords-TiltMate-debug.apk"
 
 build-release: check-env ## Build release APK
-	@echo "$(CYAN)Building release APK...$(NC)"
+	@echo -e "$(CYAN)Building release APK...$(NC)"
 	./gradlew assembleRelease --console=plain
-	@echo "$(GREEN)Release APK built successfully!$(NC)"
-	@echo "$(CYAN)Location:$(NC) app/build/outputs/apk/release/linuxswords-TiltMate-release.apk"
+	@echo -e "$(GREEN)Release APK built successfully!$(NC)"
+	@echo -e "$(CYAN)Location:$(NC) app/build/outputs/apk/release/linuxswords-TiltMate-release.apk"
 
 build-bundle: check-env ## Build release AAB (Android App Bundle) for Play Store
-	@echo "$(CYAN)Building release AAB...$(NC)"
+	@echo -e "$(CYAN)Building release AAB...$(NC)"
 	./gradlew bundleRelease -x lintVitalRelease -x lint --console=plain
-	@echo "$(GREEN)Release AAB built successfully!$(NC)"
-	@echo "$(CYAN)Location:$(NC) app/build/outputs/bundle/release/app-release.aab"
-	@ls -lh app/build/outputs/bundle/release/app-release.aab | awk '{print "$(CYAN)Size:$(NC)", $$5}'
+	@echo -e "$(GREEN)Release AAB built successfully!$(NC)"
+	@echo -e "$(CYAN)Location:$(NC) app/build/outputs/bundle/release/app-release.aab"
+	@ls -lh app/build/outputs/bundle/release/app-release.aab | awk '{print "\033[0;36mSize:\033[0m", $$5}'
 
 build-all-release: check-env ## Build both APK and AAB for release
-	@echo "$(CYAN)Building all release artifacts (APK + AAB)...$(NC)"
+	@echo -e "$(CYAN)Building all release artifacts (APK + AAB)...$(NC)"
 	./gradlew assembleRelease bundleRelease -x lintVitalRelease -x lint --console=plain
-	@echo "$(GREEN)All release artifacts built successfully!$(NC)"
-	@echo "$(CYAN)APK Location:$(NC) app/build/outputs/apk/release/linuxswords-TiltMate-release.apk"
-	@ls -lh app/build/outputs/apk/release/linuxswords-TiltMate-release.apk | awk '{print "$(CYAN)  Size:$(NC)", $$5}'
-	@echo "$(CYAN)AAB Location:$(NC) app/build/outputs/bundle/release/app-release.aab"
-	@ls -lh app/build/outputs/bundle/release/app-release.aab | awk '{print "$(CYAN)  Size:$(NC)", $$5}'
+	@echo -e "$(GREEN)All release artifacts built successfully!$(NC)"
+	@echo -e "$(CYAN)APK Location:$(NC) app/build/outputs/apk/release/linuxswords-TiltMate-release.apk"
+	@ls -lh app/build/outputs/apk/release/linuxswords-TiltMate-release.apk | awk '{print "\033[0;36m  Size:\033[0m", $$5}'
+	@echo -e "$(CYAN)AAB Location:$(NC) app/build/outputs/bundle/release/app-release.aab"
+	@ls -lh app/build/outputs/bundle/release/app-release.aab | awk '{print "\033[0;36m  Size:\033[0m", $$5}'
 
 assemble: check-env ## Assemble all variants
-	@echo "$(CYAN)Assembling all APK variants...$(NC)"
+	@echo -e "$(CYAN)Assembling all APK variants...$(NC)"
 	./gradlew assemble --console=plain
 
 install: build-debug ## Build and install debug APK to connected device
-	@echo "$(CYAN)Installing debug APK to device...$(NC)"
+	@echo -e "$(CYAN)Installing debug APK to device...$(NC)"
 	./gradlew installDebug --console=plain
-	@echo "$(GREEN)App installed successfully!$(NC)"
+	@echo -e "$(GREEN)App installed successfully!$(NC)"
 
 ##@ Code Quality
 
 lint: check-env ## Run Android lint checks
-	@echo "$(CYAN)Running lint checks...$(NC)"
+	@echo -e "$(CYAN)Running lint checks...$(NC)"
 	./gradlew lint --console=plain
-	@echo "$(GREEN)Lint checks completed!$(NC)"
-	@echo "$(CYAN)Report:$(NC) app/build/reports/lint-results.html"
+	@echo -e "$(GREEN)Lint checks completed!$(NC)"
+	@echo -e "$(CYAN)Report:$(NC) app/build/reports/lint-results.html"
 
 ##@ Maintenance
 
 clean: ## Clean build artifacts and cache
-	@echo "$(CYAN)Cleaning build artifacts...$(NC)"
+	@echo -e "$(CYAN)Cleaning build artifacts...$(NC)"
 	./gradlew clean --console=plain
-	@echo "$(GREEN)Clean completed!$(NC)"
+	@echo -e "$(GREEN)Clean completed!$(NC)"
 
 clean-all: clean ## Deep clean including Gradle cache
-	@echo "$(CYAN)Performing deep clean...$(NC)"
+	@echo -e "$(CYAN)Performing deep clean...$(NC)"
 	rm -rf .gradle
 	rm -rf app/build
 	rm -rf build
-	@echo "$(GREEN)Deep clean completed!$(NC)"
+	@echo -e "$(GREEN)Deep clean completed!$(NC)"
 
 gradle-refresh: ## Refresh Gradle dependencies
-	@echo "$(CYAN)Refreshing Gradle dependencies...$(NC)"
+	@echo -e "$(CYAN)Refreshing Gradle dependencies...$(NC)"
 	./gradlew --refresh-dependencies --console=plain
 
 ##@ Development Workflow
 
 dev: clean test build ## Complete dev cycle: clean, test, build
-	@echo "$(GREEN)Development cycle completed!$(NC)"
+	@echo -e "$(GREEN)Development cycle completed!$(NC)"
 
 ci: clean test-unit lint build-debug ## CI pipeline: clean, test, lint, build
-	@echo "$(GREEN)CI pipeline completed successfully!$(NC)"
+	@echo -e "$(GREEN)CI pipeline completed successfully!$(NC)"
 
 quick: ## Quick build without tests (for rapid iteration)
-	@echo "$(CYAN)Quick build (skipping tests)...$(NC)"
+	@echo -e "$(CYAN)Quick build (skipping tests)...$(NC)"
 	./gradlew assembleDebug --console=plain
-	@echo "$(GREEN)Quick build completed!$(NC)"
+	@echo -e "$(GREEN)Quick build completed!$(NC)"
 
 ##@ Release
 
 release-check: ## Check if ready for release
-	@echo "$(CYAN)Pre-release checklist:$(NC)"
+	@echo -e "$(CYAN)Pre-release checklist:$(NC)"
 	@echo ""
-	@make test > /dev/null 2>&1 && echo "$(GREEN)✓$(NC) Tests pass" || echo "$(RED)✗$(NC) Tests fail"
-	@make lint > /dev/null 2>&1 && echo "$(GREEN)✓$(NC) Lint passes" || echo "$(YELLOW)⚠$(NC) Lint has warnings"
-	@make build-release > /dev/null 2>&1 && echo "$(GREEN)✓$(NC) Release builds" || echo "$(RED)✗$(NC) Release build fails"
+	@make test > /dev/null 2>&1 && echo -e "$(GREEN)✓$(NC) Tests pass" || echo -e "$(RED)✗$(NC) Tests fail"
+	@make lint > /dev/null 2>&1 && echo -e "$(GREEN)✓$(NC) Lint passes" || echo -e "$(YELLOW)⚠$(NC) Lint has warnings"
+	@make build-release > /dev/null 2>&1 && echo -e "$(GREEN)✓$(NC) Release builds" || echo -e "$(RED)✗$(NC) Release build fails"
 	@echo ""
-	@echo "$(CYAN)Current version:$(NC)"
+	@echo -e "$(CYAN)Current version:$(NC)"
 	@grep "versionName" app/build.gradle | head -1 || echo "Not found"
 	@echo ""
-	@echo "$(CYAN)Recent tags:$(NC)"
+	@echo -e "$(CYAN)Recent tags:$(NC)"
 	@git tag -l --sort=-v:refname | head -5 || echo "No tags yet"
 
 release-tag: ## Create a release tag (usage: make release-tag VERSION=1.0.0)
 	@if [ -z "$(VERSION)" ]; then \
-		echo "$(RED)Error: VERSION not specified$(NC)"; \
+		echo -e "$(RED)Error: VERSION not specified$(NC)"; \
 		echo "Usage: make release-tag VERSION=1.0.0"; \
 		exit 1; \
 	fi
-	@echo "$(CYAN)Creating release tag v$(VERSION)...$(NC)"
+	@echo -e "$(CYAN)Creating release tag v$(VERSION)...$(NC)"
 	@git tag -a v$(VERSION) -m "Release v$(VERSION)"
-	@echo "$(GREEN)Tag v$(VERSION) created!$(NC)"
+	@echo -e "$(GREEN)Tag v$(VERSION) created!$(NC)"
 	@echo ""
-	@echo "$(CYAN)Push tag to trigger release:$(NC)"
+	@echo -e "$(CYAN)Push tag to trigger release:$(NC)"
 	@echo "  git push origin v$(VERSION)"
 
 release-push: ## Push latest tag to trigger release
 	@LATEST_TAG=$$(git describe --tags --abbrev=0 2>/dev/null); \
 	if [ -z "$$LATEST_TAG" ]; then \
-		echo "$(RED)No tags found$(NC)"; \
+		echo -e "$(RED)No tags found$(NC)"; \
 		exit 1; \
 	fi; \
-	echo "$(CYAN)Pushing tag $$LATEST_TAG to trigger release...$(NC)"; \
+	echo -e "$(CYAN)Pushing tag $$LATEST_TAG to trigger release...$(NC)"; \
 	git push origin $$LATEST_TAG; \
-	echo "$(GREEN)Tag pushed! Release workflow starting...$(NC)"; \
+	echo -e "$(GREEN)Tag pushed! Release workflow starting...$(NC)"; \
 	echo "View at: https://github.com/linuxswords/TiltMate/actions"
 
 release-list: ## List all releases
-	@echo "$(CYAN)Releases:$(NC)"
+	@echo -e "$(CYAN)Releases:$(NC)"
 	@if command -v gh > /dev/null 2>&1; then \
 		gh release list; \
 	else \
-		echo "$(YELLOW)GitHub CLI (gh) not installed$(NC)"; \
+		echo -e "$(YELLOW)GitHub CLI (gh) not installed$(NC)"; \
 		echo "View at: https://github.com/linuxswords/TiltMate/releases"; \
 	fi
 
@@ -223,43 +223,43 @@ release-view: ## View latest release
 	@if command -v gh > /dev/null 2>&1; then \
 		gh release view --web; \
 	else \
-		echo "$(CYAN)Latest release:$(NC) https://github.com/linuxswords/TiltMate/releases/latest"; \
+		echo -e "$(CYAN)Latest release:$(NC) https://github.com/linuxswords/TiltMate/releases/latest"; \
 	fi
 
 ##@ CI/CD
 
 ci-status: ## Check GitHub Actions workflow status (requires gh CLI)
-	@echo "$(CYAN)GitHub Actions Workflow Status:$(NC)"
+	@echo -e "$(CYAN)GitHub Actions Workflow Status:$(NC)"
 	@if command -v gh > /dev/null 2>&1; then \
 		gh run list --workflow=android-ci.yml --limit 5; \
 	else \
-		echo "$(YELLOW)GitHub CLI (gh) not installed$(NC)"; \
+		echo -e "$(YELLOW)GitHub CLI (gh) not installed$(NC)"; \
 		echo "Install: https://cli.github.com/"; \
 		echo "Or view status at: https://github.com/linuxswords/TiltMate/actions"; \
 	fi
 
 ci-view: ## Open GitHub Actions in browser
-	@echo "$(CYAN)Opening GitHub Actions...$(NC)"
+	@echo -e "$(CYAN)Opening GitHub Actions...$(NC)"
 	@if command -v gh > /dev/null 2>&1; then \
 		gh workflow view android-ci.yml --web; \
 	else \
-		echo "$(YELLOW)GitHub CLI (gh) not installed$(NC)"; \
+		echo -e "$(YELLOW)GitHub CLI (gh) not installed$(NC)"; \
 		echo "View at: https://github.com/linuxswords/TiltMate/actions"; \
 	fi
 
 ci-logs: ## View latest CI run logs (requires gh CLI)
-	@echo "$(CYAN)Fetching latest CI logs...$(NC)"
+	@echo -e "$(CYAN)Fetching latest CI logs...$(NC)"
 	@if command -v gh > /dev/null 2>&1; then \
 		gh run view --log; \
 	else \
-		echo "$(YELLOW)GitHub CLI (gh) not installed$(NC)"; \
+		echo -e "$(YELLOW)GitHub CLI (gh) not installed$(NC)"; \
 		echo "Install: https://cli.github.com/"; \
 	fi
 
 ##@ Information
 
 info: ## Display project information
-	@echo "$(CYAN)Project Information:$(NC)"
+	@echo -e "$(CYAN)Project Information:$(NC)"
 	@echo "  Name: TiltMate"
 	@echo "  Type: Android Application"
 	@echo "  Language: Java"
@@ -267,15 +267,15 @@ info: ## Display project information
 	@echo "  Min SDK: 21 (Android 5.0)"
 	@echo "  Target SDK: 36 (Android 15)"
 	@echo ""
-	@echo "$(CYAN)Project Structure:$(NC)"
+	@echo -e "$(CYAN)Project Structure:$(NC)"
 	@echo "  Source: app/src/main/java/org/linuxswords/games/tiltmate/"
 	@echo "  Tests: app/src/test/java/org/linuxswords/games/tiltmate/"
 	@echo "  Layouts: app/src/main/res/layout/"
 
 dependencies: check-env ## Show project dependencies
-	@echo "$(CYAN)Project dependencies:$(NC)"
+	@echo -e "$(CYAN)Project dependencies:$(NC)"
 	./gradlew dependencies --configuration debugCompileClasspath --console=plain | head -50
 
 tasks: check-env ## List all available Gradle tasks
-	@echo "$(CYAN)Available Gradle tasks:$(NC)"
+	@echo -e "$(CYAN)Available Gradle tasks:$(NC)"
 	./gradlew tasks --console=plain
