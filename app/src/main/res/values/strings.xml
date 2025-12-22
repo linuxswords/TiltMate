@@ -1,8 +1,8 @@
 <resources>
-  <string name="app_name">LinuxswordsTiltMate</string>
+  <string name="app_name">TiltMate</string>
   <string name="clockLeft">15:00</string>
   <string name="clockRight">15:00</string>
-  <string name="title">linuxswords tiltmate</string>
+  <string name="title">TiltMate</string>
   <string name="soundSwitch">sound</string>
   <string name="lostMessage">lost</string>
 </resources>
