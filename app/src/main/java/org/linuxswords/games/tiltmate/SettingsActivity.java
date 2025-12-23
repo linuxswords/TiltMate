@@ -39,7 +39,7 @@ public class SettingsActivity extends Activity
         if (cancelButton != null) {
             cancelButton.setOnClickListener(v -> {
                 Log.d(TAG, "Cancel button clicked");
-                startActivity(new Intent(this, MainActivity.class));
+                finish();  // Return to existing MainActivity instead of creating new one
             });
         }
 
@@ -73,6 +73,6 @@ public class SettingsActivity extends Activity
     {
         TimeSettingsManager timeSettingsManager = TimeSettingsManager.instance(this);
         timeSettingsManager.setCurrent(timeSetting);
-        startActivity(new Intent(this, MainActivity.class));
+        finish();  // Return to existing MainActivity instead of creating new one
     }
 }

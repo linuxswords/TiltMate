@@ -69,6 +69,11 @@ public abstract class PausableCountDownTimer
         this.remainingTime += timeInMillis;
     }
 
+    public void setRemainingTime(long timeInMillis)
+    {
+        this.remainingTime = timeInMillis;
+    }
+
     public boolean isPaused()
     {
         return isPaused;

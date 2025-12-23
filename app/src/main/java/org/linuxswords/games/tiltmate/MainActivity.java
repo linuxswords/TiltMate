@@ -29,6 +29,10 @@ public class MainActivity extends Activity implements TiltListener, PlayerClock.
     private TickingSoundManager tickingSound;
     private TextView moveCountDisplay;
 
+    // Track which clock was running before pausing (for settings navigation)
+    private enum ClockState { NONE, LEFT, RIGHT }
+    private ClockState runningClockBeforePause = ClockState.NONE;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -42,8 +46,8 @@ public class MainActivity extends Activity implements TiltListener, PlayerClock.
         TimeSettingsManager timeSettingsManager = TimeSettingsManager.instance(this);
         preferences = new AppPreferences(this);
 
-        leftClock = new PlayerClock(leftClockView, timeSettingsManager).showStartTime();
-        rightClock = new PlayerClock(rightClockView, timeSettingsManager).showStartTime();
+        leftClock = new PlayerClock(leftClockView, timeSettingsManager);
+        rightClock = new PlayerClock(rightClockView, timeSettingsManager);
 
         // Set finish listener on both clocks to stop ticking when time runs out
         leftClock.setFinishListener(this);
@@ -60,9 +64,28 @@ public class MainActivity extends Activity implements TiltListener, PlayerClock.
 
         this.<TextView>findViewById(R.id.timeSettingDisplay).setText(timeSettingsManager.getCurrent().getLabel());
 
-        // Initialize move counter display
+        // Initialize move counter display (must be before restoreClockState)
         moveCountDisplay = findViewById(R.id.moveCountDisplay);
         updateMoveCounterVisibility();
+
+        // Restore saved state if available
+        if (savedInstanceState != null) {
+            long leftTime = savedInstanceState.getLong("leftClockTime", -1);
+            long rightTime = savedInstanceState.getLong("rightClockTime", -1);
+            int savedMoveCount = savedInstanceState.getInt("moveCount", 0);
+            String runningClock = savedInstanceState.getString("runningClock", "NONE");
+
+            if (leftTime > 0 && rightTime > 0) {
+                // Restore clock times
+                restoreClockState(leftTime, rightTime, savedMoveCount, runningClock);
+            } else {
+                leftClock.showStartTime();
+                rightClock.showStartTime();
+            }
+        } else {
+            leftClock.showStartTime();
+            rightClock.showStartTime();
+        }
 
         // pause on a single tap, reset on double tap, show settings on a long tap
         findViewById(R.id.parent).setOnClickListener(new DoubleClickListener()
@@ -133,6 +156,17 @@ public class MainActivity extends Activity implements TiltListener, PlayerClock.
 
         // Update move counter visibility in case it was changed in settings
         updateMoveCounterVisibility();
+
+        // Restore clock state if a clock was running before we paused
+        if (runningClockBeforePause == ClockState.LEFT) {
+            leftClock.start();
+            tickingSound.start();
+        } else if (runningClockBeforePause == ClockState.RIGHT) {
+            rightClock.start();
+            tickingSound.start();
+        }
+        // Reset state
+        runningClockBeforePause = ClockState.NONE;
     }
 
     @Override
@@ -140,8 +174,37 @@ public class MainActivity extends Activity implements TiltListener, PlayerClock.
     {
         super.onPause();
         tiltSensor.unregister();
-        // Stop ticking when app is paused
-        tickingSound.stop();
+
+        // Save which clock is running before pausing (for settings navigation)
+        if (leftClock.isRunning()) {
+            runningClockBeforePause = ClockState.LEFT;
+        } else if (rightClock.isRunning()) {
+            runningClockBeforePause = ClockState.RIGHT;
+        } else {
+            runningClockBeforePause = ClockState.NONE;
+        }
+
+        // Pause all clocks to preserve state when navigating to settings
+        pauseAllClocks();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState)
+    {
+        super.onSaveInstanceState(outState);
+        // Save clock states
+        outState.putLong("leftClockTime", leftClock.getRemainingTime());
+        outState.putLong("rightClockTime", rightClock.getRemainingTime());
+        outState.putInt("moveCount", moveCount);
+
+        // Save which clock is running
+        if (leftClock.isRunning()) {
+            outState.putString("runningClock", "LEFT");
+        } else if (rightClock.isRunning()) {
+            outState.putString("runningClock", "RIGHT");
+        } else {
+            outState.putString("runningClock", "NONE");
+        }
     }
 
     @Override
@@ -151,6 +214,26 @@ public class MainActivity extends Activity implements TiltListener, PlayerClock.
         // Release sound resources
         if (tickingSound != null) {
             tickingSound.release();
+        }
+    }
+
+    private void restoreClockState(long leftTime, long rightTime, int savedMoveCount, String runningClock)
+    {
+        // Restore times
+        leftClock.setRemainingTime(leftTime);
+        rightClock.setRemainingTime(rightTime);
+
+        // Restore move count
+        moveCount = savedMoveCount;
+        updateMoveCountDisplay();
+
+        // Restore running state
+        if ("LEFT".equals(runningClock)) {
+            runningClockBeforePause = ClockState.LEFT;
+        } else if ("RIGHT".equals(runningClock)) {
+            runningClockBeforePause = ClockState.RIGHT;
+        } else {
+            runningClockBeforePause = ClockState.NONE;
         }
     }
 

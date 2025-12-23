@@ -31,7 +31,7 @@ public class AdvancedSettingsActivity extends Activity
 
         // Back button returns to settings screen
         findViewById(R.id.advancedSettingsBackButton).setOnClickListener(v ->
-            startActivity(new Intent(this, SettingsActivity.class))
+            finish()  // Return to existing SettingsActivity instead of creating new one
         );
     }
 

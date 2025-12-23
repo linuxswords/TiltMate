@@ -87,6 +87,24 @@ public class PlayerClock
         return this;
     }
 
+    public boolean isRunning()
+    {
+        return !this.countDownTimer.isPaused();
+    }
+
+    public long getRemainingTime()
+    {
+        return this.countDownTimer.getRemainingTime();
+    }
+
+    public void setRemainingTime(long timeInMillis)
+    {
+        this.countDownTimer.pause();
+        this.countDownTimer.setRemainingTime(timeInMillis);
+        this.view.setText(TimeFormatter.convertMillisIntoDisplayableTime(timeInMillis));
+        this.view.setTextColor(getDynamicTextColor(timeInMillis));
+    }
+
     private int getDynamicTextColor(long currentTimeInMillis)
     {
         int result = Color.WHITE;
