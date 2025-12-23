@@ -68,11 +68,12 @@ make help                   # All commands
 - [x] settings: add sound effects
 - [ ] analog clock?
 - [ ] simple tap could activate meta info like current time setting/info etc? But I like the single tap pause function
-- [ ] show number of moves made
 
 ## todos
 
+- [ ] ability for custom time settings
 - [x] better picture
+- [x] show number of moves made
 - [x] show current time setting on front screen
 - [x] double tab to reset clock
 - [x] avoid flickering/to-quick-switches by lowering sensibility
