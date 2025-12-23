@@ -14,7 +14,8 @@
 #   make clean         - Clean build artifacts
 
 .PHONY: help test test-unit test-instrumented build build-debug build-release \
-        install clean check-env lint assemble run-tests-verbose
+        install clean check-env lint assemble run-tests-verbose release \
+        release-tag release-push release-check release-list release-view
 
 # Default target
 .DEFAULT_GOAL := help
@@ -185,6 +186,21 @@ release-check: ## Check if ready for release
 	@echo ""
 	@echo -e "$(CYAN)Recent tags:$(NC)"
 	@git tag -l --sort=-v:refname | head -5 || echo "No tags yet"
+
+release: ## Create and push release tag (usage: make release VERSION=1.0.0)
+	@if [ -z "$(VERSION)" ]; then \
+		echo -e "$(RED)Error: VERSION not specified$(NC)"; \
+		echo "Usage: make release VERSION=1.0.0"; \
+		exit 1; \
+	fi
+	@echo -e "$(CYAN)Creating release tag v$(VERSION)...$(NC)"
+	@git tag -a v$(VERSION) -m "Release v$(VERSION)"
+	@echo -e "$(GREEN)Tag v$(VERSION) created!$(NC)"
+	@echo ""
+	@echo -e "$(CYAN)Pushing tag to trigger release workflow...$(NC)"
+	@git push origin v$(VERSION)
+	@echo -e "$(GREEN)Tag pushed! Release workflow starting...$(NC)"
+	@echo "View at: https://github.com/linuxswords/TiltMate/actions"
 
 release-tag: ## Create a release tag (usage: make release-tag VERSION=1.0.0)
 	@if [ -z "$(VERSION)" ]; then \
