@@ -53,4 +53,17 @@
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintVertical_bias="0.581"/>
 
+  <TextView
+    android:id="@+id/moveCountDisplay"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="0 moves"
+    android:textColor="#FFFFFF"
+    android:textSize="18sp"
+    android:visibility="gone"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/timeSettingDisplay"
+    android:layout_marginTop="8dp"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

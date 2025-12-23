@@ -10,6 +10,7 @@ public class AppPreferences
     private static final String KEY_TIME_SETTING = "selected_time_setting";
     private static final String KEY_TICKING_ENABLED = "ticking_enabled";
     private static final String KEY_TILT_SENSITIVITY = "tilt_sensitivity";
+    private static final String KEY_SHOW_MOVES = "show_moves_enabled";
 
     private final SharedPreferences prefs;
 
@@ -74,5 +75,22 @@ public class AppPreferences
     public int getTiltSensitivity()
     {
         return prefs.getInt(KEY_TILT_SENSITIVITY, 1);
+    }
+
+    /**
+     * Enable or disable move counter display
+     */
+    public void setShowMovesEnabled(boolean enabled)
+    {
+        prefs.edit().putBoolean(KEY_SHOW_MOVES, enabled).apply();
+    }
+
+    /**
+     * Check if move counter display is enabled
+     * @return true if move counter is enabled (default: false)
+     */
+    public boolean isShowMovesEnabled()
+    {
+        return prefs.getBoolean(KEY_SHOW_MOVES, false);
     }
 }

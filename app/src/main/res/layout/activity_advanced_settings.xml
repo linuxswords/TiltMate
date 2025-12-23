@@ -1,18 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<ScrollView
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:background="#403E3E"
+  android:fillViewport="true">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:paddingBottom="40dp"
   tools:context=".AdvancedSettingsActivity">
 
   <TextView
     android:id="@+id/advancedSettingsTitle"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginTop="40dp"
+    android:layout_marginTop="30dp"
     android:text="Advanced Settings"
     android:textColor="#FFFFFF"
     android:textSize="32sp"
@@ -27,7 +33,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginStart="80dp"
-    android:layout_marginTop="60dp"
+    android:layout_marginTop="35dp"
     android:text="Clock Ticking"
     android:textColor="#FFFFFF"
     android:textSize="24sp"
@@ -43,9 +49,7 @@
     android:theme="@style/Theme.MaterialComponents"
     app:layout_constraintBottom_toBottomOf="@+id/tickingLabel"
     app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toTopOf="@+id/tickingLabel"
-    app:thumbTint="#FFFFFF"
-    app:trackTint="#666666"/>
+    app:layout_constraintTop_toTopOf="@+id/tickingLabel"/>
 
   <!-- Sensitivity Setting -->
   <TextView
@@ -66,7 +70,7 @@
     android:layout_width="105dp"
     android:layout_height="55dp"
     android:layout_marginStart="40dp"
-    android:layout_marginTop="60dp"
+    android:layout_marginTop="30dp"
     android:text="Low"
     android:textColor="#FFFFFF"
     android:textSize="16sp"
@@ -112,6 +116,30 @@
     app:strokeColor="#FFFFFF"
     app:strokeWidth="2dp"/>
 
+  <!-- Show Move Counter Setting -->
+  <TextView
+    android:id="@+id/showMovesLabel"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="80dp"
+    android:layout_marginTop="30dp"
+    android:text="Show Move Counter"
+    android:textColor="#FFFFFF"
+    android:textSize="24sp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/sensitivityLowButton"/>
+
+  <com.google.android.material.switchmaterial.SwitchMaterial
+    android:id="@+id/showMovesSwitch"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="80dp"
+    android:checked="false"
+    android:theme="@style/Theme.MaterialComponents"
+    app:layout_constraintBottom_toBottomOf="@+id/showMovesLabel"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="@+id/showMovesLabel"/>
+
   <!-- Back button in top-right corner -->
   <com.google.android.material.button.MaterialButton
     android:id="@+id/advancedSettingsBackButton"
@@ -131,3 +159,4 @@
     app:strokeWidth="0dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

@@ -27,6 +27,7 @@ public class AdvancedSettingsActivity extends Activity
 
         setupTickingSwitch();
         setupSensitivityButtons();
+        setupShowMovesSwitch();
 
         // Back button returns to settings screen
         findViewById(R.id.advancedSettingsBackButton).setOnClickListener(v ->
@@ -40,11 +41,28 @@ public class AdvancedSettingsActivity extends Activity
 
         // Load saved setting
         tickingSwitch.setChecked(preferences.isTickingEnabled());
+        updateSwitchStyle(tickingSwitch, preferences.isTickingEnabled());
 
         // Save when changed
-        tickingSwitch.setOnCheckedChangeListener((buttonView, isChecked) ->
-            preferences.setTickingEnabled(isChecked)
-        );
+        tickingSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            preferences.setTickingEnabled(isChecked);
+            updateSwitchStyle(tickingSwitch, isChecked);
+        });
+    }
+
+    private void setupShowMovesSwitch()
+    {
+        SwitchMaterial showMovesSwitch = findViewById(R.id.showMovesSwitch);
+
+        // Load saved setting
+        showMovesSwitch.setChecked(preferences.isShowMovesEnabled());
+        updateSwitchStyle(showMovesSwitch, preferences.isShowMovesEnabled());
+
+        // Save when changed
+        showMovesSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            preferences.setShowMovesEnabled(isChecked);
+            updateSwitchStyle(showMovesSwitch, isChecked);
+        });
     }
 
     private void setupSensitivityButtons()
@@ -90,19 +108,34 @@ public class AdvancedSettingsActivity extends Activity
         }
 
         if (selectedButton != null) {
-            // Use filled background and thicker border to make selection clearly visible
+            // Use bright white background and border to match switch active state
             int densityDp = (int) getResources().getDisplayMetrics().density;
-            selectedButton.setBackgroundTintList(ColorStateList.valueOf(0xFF66AA66));
-            selectedButton.setStrokeWidth(4 * densityDp);
-            selectedButton.setStrokeColor(ColorStateList.valueOf(0xFF88EE88));
+            selectedButton.setBackgroundTintList(ColorStateList.valueOf(0xFFBBBBBB)); // Light gray like switch track
+            selectedButton.setStrokeWidth(2 * densityDp);
+            selectedButton.setStrokeColor(ColorStateList.valueOf(0xFFFFFFFF)); // White border
+            selectedButton.setTextColor(0xFF000000); // Black text for contrast
         }
     }
 
     private void resetButtonStyle(MaterialButton button)
     {
         int densityDp = (int) getResources().getDisplayMetrics().density;
-        button.setBackgroundTintList(ColorStateList.valueOf(0x00000000)); // Transparent
+        button.setBackgroundTintList(ColorStateList.valueOf(0xFF333333)); // Very dark gray like inactive switch
         button.setStrokeWidth(2 * densityDp);
-        button.setStrokeColor(ColorStateList.valueOf(0xFFFFFFFF));
+        button.setStrokeColor(ColorStateList.valueOf(0xFF666666)); // Dark gray border
+        button.setTextColor(0xFFFFFFFF); // White text
+    }
+
+    private void updateSwitchStyle(SwitchMaterial switchMaterial, boolean isChecked)
+    {
+        if (isChecked) {
+            // Active state: bright white track and thumb
+            switchMaterial.setThumbTintList(ColorStateList.valueOf(0xFFFFFFFF)); // White
+            switchMaterial.setTrackTintList(ColorStateList.valueOf(0xFFBBBBBB)); // Light gray
+        } else {
+            // Inactive state: dark gray track and thumb
+            switchMaterial.setThumbTintList(ColorStateList.valueOf(0xFF666666)); // Dark gray
+            switchMaterial.setTrackTintList(ColorStateList.valueOf(0xFF333333)); // Very dark gray
+        }
     }
 }

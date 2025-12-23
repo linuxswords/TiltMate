@@ -20,12 +20,14 @@ public class MainActivity extends Activity implements TiltListener, PlayerClock.
 {
     private static final String TAG = "MainActivity";
     private int currentTiltDegree = 0;
+    private int moveCount = 0;
 
     private PlayerClock leftClock;
     private PlayerClock rightClock;
     private TiltSensor tiltSensor;
     private AppPreferences preferences;
     private TickingSoundManager tickingSound;
+    private TextView moveCountDisplay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -58,6 +60,10 @@ public class MainActivity extends Activity implements TiltListener, PlayerClock.
 
         this.<TextView>findViewById(R.id.timeSettingDisplay).setText(timeSettingsManager.getCurrent().getLabel());
 
+        // Initialize move counter display
+        moveCountDisplay = findViewById(R.id.moveCountDisplay);
+        updateMoveCounterVisibility();
+
         // pause on a single tap, reset on double tap, show settings on a long tap
         findViewById(R.id.parent).setOnClickListener(new DoubleClickListener()
         {
@@ -88,6 +94,9 @@ public class MainActivity extends Activity implements TiltListener, PlayerClock.
         toPause.pause();
         // Ticking continues while one clock is running
         tickingSound.start();
+        // Increment move counter
+        moveCount++;
+        updateMoveCountDisplay();
     }
 
 
@@ -105,6 +114,9 @@ public class MainActivity extends Activity implements TiltListener, PlayerClock.
         rightClock.restart().showStartTime();
         // Stop ticking on restart (clocks are reset but not running)
         tickingSound.stop();
+        // Reset move counter
+        moveCount = 0;
+        updateMoveCountDisplay();
     }
 
 
@@ -118,6 +130,9 @@ public class MainActivity extends Activity implements TiltListener, PlayerClock.
 
         // Reload ticking setting in case it was changed
         tickingSound.setEnabled(preferences.isTickingEnabled());
+
+        // Update move counter visibility in case it was changed in settings
+        updateMoveCounterVisibility();
     }
 
     @Override
@@ -166,5 +181,20 @@ public class MainActivity extends Activity implements TiltListener, PlayerClock.
         // Stop ticking sound when time runs out
         tickingSound.stop();
         Log.d(TAG, "Clock finished - ticking sound stopped");
+    }
+
+    private void updateMoveCounterVisibility()
+    {
+        if (preferences.isShowMovesEnabled()) {
+            moveCountDisplay.setVisibility(View.VISIBLE);
+            updateMoveCountDisplay();
+        } else {
+            moveCountDisplay.setVisibility(View.GONE);
+        }
+    }
+
+    private void updateMoveCountDisplay()
+    {
+        moveCountDisplay.setText(moveCount + " moves");
     }
 }
