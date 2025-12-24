@@ -36,7 +36,7 @@ Download the APK and install on your Android device (Android 5.0+).
 
 ## Development
 
-**Prerequisites:** JDK 17+, Android SDK (API 21+)
+**Prerequisites:** JDK 21+, Android SDK (API 21+)
 
 ```bash
 # Setup

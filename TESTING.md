@@ -44,12 +44,12 @@ Reports are generated in `app/build/reports/tests/testDebugUnitTest/index.html`
 
 ## Prerequisites
 
-- **JDK 17+** - Required
+- **JDK 21+** - Required
 - **Android SDK** - Optional for unit tests, required for APK build
 
 Setup:
 ```bash
-export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
 export ANDROID_HOME=$HOME/Android/Sdk
 ```
 

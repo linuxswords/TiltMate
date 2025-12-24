@@ -50,24 +50,24 @@ fi
 print_status "Checking Java installation..."
 if command -v java &> /dev/null; then
     JAVA_VERSION=$(java -version 2>&1 | awk -F '"' '/version/ {print $2}' | cut -d. -f1)
-    if [ "$JAVA_VERSION" -ge 17 ]; then
+    if [ "$JAVA_VERSION" -ge 21 ]; then
         print_success "Java $JAVA_VERSION is already installed"
     else
-        print_warning "Java version is too old (requires 17+)"
+        print_warning "Java version is too old (requires 21+)"
         echo "  Current version: $JAVA_VERSION"
     fi
 else
     print_warning "Java is not installed"
     echo ""
-    print_status "Installing OpenJDK 17..."
+    print_status "Installing OpenJDK 21..."
 
     if command -v apt-get &> /dev/null; then
         sudo apt-get update
-        sudo apt-get install -y openjdk-17-jdk
-        print_success "OpenJDK 17 installed"
+        sudo apt-get install -y openjdk-21-jdk
+        print_success "OpenJDK 21 installed"
     else
         print_error "Cannot install Java automatically (apt-get not found)"
-        echo "  Please install JDK 17+ manually"
+        echo "  Please install JDK 21+ manually"
         exit 1
     fi
 fi
