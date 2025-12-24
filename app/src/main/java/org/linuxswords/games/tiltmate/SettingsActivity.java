@@ -33,23 +33,23 @@ public class SettingsActivity extends Activity
             });
         }
 
-        // cancel
-        android.view.View cancelButton = findViewById(R.id.settingsCancelButton);
-        Log.d(TAG, "settingsCancelButton found: " + (cancelButton != null));
-        if (cancelButton != null) {
-            cancelButton.setOnClickListener(v -> {
-                Log.d(TAG, "Cancel button clicked");
-                finish();  // Return to existing MainActivity instead of creating new one
-            });
-        }
-
-        // exit
+        // exit (now returns to game - has revert icon)
         android.view.View exitButton = findViewById(R.id.exitButton);
         Log.d(TAG, "exitButton found: " + (exitButton != null));
         if (exitButton != null) {
             exitButton.setOnClickListener(v -> {
-                Log.d(TAG, "Exit button clicked");
-                this.finishAffinity();
+                Log.d(TAG, "Exit button clicked - returning to game");
+                finish();  // Return to existing MainActivity
+            });
+        }
+
+        // cancel (now quits app - has power icon)
+        android.view.View cancelButton = findViewById(R.id.settingsCancelButton);
+        Log.d(TAG, "settingsCancelButton found: " + (cancelButton != null));
+        if (cancelButton != null) {
+            cancelButton.setOnClickListener(v -> {
+                Log.d(TAG, "Cancel button clicked - quitting app");
+                this.finishAffinity();  // Quit the app
             });
         }
     }
