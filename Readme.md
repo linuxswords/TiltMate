@@ -6,12 +6,11 @@
 
 <img src="./assets/images/tiltmate-icon.png" alt="TiltMate icon" width="200"/>
 
-A chess clock! It started as a weekend project, trying to build a chess clock app based on tilting the phone :P
-inspired by tempest clock.
+A chess clock! It started as a weekend project, trying to build a chess clock app based on tilting the phone :P.
 
-Put your phone onto something that can be tilted and instead of pressing a button on your chess clock.
+Put your phone onto something that can be tilted and instead of pressing a button you tilt your phone, like a seesaw!
 
-There are 3D prints available and will be part of the project in the future.
+There are 3D prints available for the base and those will be part of the project in the future.
 
 ## Download
 
@@ -64,15 +63,16 @@ make help                   # All commands
 
 ## ideas
 
-- [x] store your last time setting (profile)
-- [x] settings: add sound effects
 - [ ] analog clock?
 - [ ] simple tap could activate meta info like current time setting/info etc? But I like the single tap pause function
 
 ## todos
 
+- [ ] Add example STL file for a base
 - [ ] ability for custom time settings
 - [x] better picture
+- [x] store your last time setting
+- [x] settings: add sound effects
 - [x] show number of moves made
 - [x] show current time setting on front screen
 - [x] double tab to reset clock
