@@ -69,7 +69,6 @@ make help                   # All commands
 ## todos
 
 - [ ] Add example STL file for a base
-- [ ] ability for custom time settings
 - [x] better picture
 - [x] store your last time setting
 - [x] settings: add sound effects
