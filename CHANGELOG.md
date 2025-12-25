@@ -7,20 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- **Advanced Settings Switch Styling** - Enhanced visual feedback
+  - Active switches show green accent color
+  - Inactive switches show transparent/gray color
+  - Applied to both ticking sound and move counter switches
+
+### Fixed
+- **Increment Timing** - Fixed bug where time increment was added at wrong moment
+  - Increment now correctly added when clock is paused/switched (when move is made)
+  - Previously increment was incorrectly added when time resumed
+  - Ensures proper chess clock behavior per standard chess rules
+
+## [1.6.0] - 2025-12-24
+
 ### Added
-- **Show Move Counter** - New advanced setting to display the number of moves made during a game
-  - Toggle switch in Advanced Settings screen
-  - Move counter display on main game screen (18sp, white text)
-  - Counter increments on each tilt/move
-  - Counter resets when game restarts
-  - Setting defaults to disabled for existing users
+- Funding support with Buy Me a Coffee/Tea links
 - Custom gear icon (ic_settings_gear.xml) for Advanced Settings button
 
 ### Changed
-- **Java Version** - Upgraded project from Java 17 to Java 21
-  - Updated build.gradle compilation targets
-  - Updated all documentation (README.md, TESTING.md, Makefile)
-  - Updated setup-dev-env.sh installation script
 - **Settings Screen UI Improvements**
   - Swapped positions and actions of quit/return buttons
     - Exit button (revert icon) now returns to game
@@ -29,10 +34,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Buttons centered horizontally between time settings and right edge
     - Gear icon aligned vertically with gap between time setting rows
     - Reduced spacing between buttons (12dp margins)
-- **Advanced Settings Switch Styling** - Enhanced visual feedback
-  - Active switches show green accent color
-  - Inactive switches show transparent/gray color
-  - Applied to both ticking sound and move counter switches
 
 ### Fixed
 - **Clock State Preservation** - Fixed bug where clocks would reset when navigating to/from settings
@@ -43,7 +44,62 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added getRemainingTime() and setRemainingTime() methods to PlayerClock and PausableCountDownTimer
 - **Navigation Pattern** - Changed SettingsActivity to use finish() instead of creating new MainActivity instances
 
-## [1.0.0] - Initial Release
+## [1.5.0] - 2025-12-23
+
+### Added
+- **Show Move Counter** - New advanced setting to display the number of moves made during a game
+  - Toggle switch in Advanced Settings screen
+  - Move counter display on main game screen (18sp, white text)
+  - Counter increments on each tilt/move
+  - Counter resets when game restarts
+  - Setting defaults to disabled for existing users
+
+### Changed
+- Settings UI harmonization with consistent button styling and layout across settings screens
+
+## [1.4.0] - 2025-12-22
+
+### Added
+- **Settings Screen** - New dedicated screen for time control selection
+  - Grid layout with all time presets (3+0 through 15+5)
+  - Quick access to advanced settings
+  - Visual feedback for selected time controls
+
+## [1.3.0] - 2025-12-22
+
+### Added
+- **Settings Manager** - Persistent storage for time control preferences
+  - Settings persist across app restarts
+  - Automatic restoration of last used time control
+
+### Changed
+- Release workflow improvements for better APK packaging
+- Documentation updates and cleanup
+
+## [1.2.0] - 2025-12-22
+
+### Changed
+- **App Rebranding** - Changed name from "Chess Clock" to "TiltMate"
+- Improved build tooling with better Make output formatting
+- Added .tools-versions file for version management
+
+## [1.1.0] - 2025-12-22
+
+### Added
+- AAB (Android App Bundle) build support for Play Store
+- Custom app icon and branding assets
+
+### Changed
+- **Java Version** - Upgraded project from Java 17 to Java 21
+  - Updated build.gradle compilation targets
+  - Updated all documentation (README.md, TESTING.md, Makefile)
+  - Updated setup-dev-env.sh installation script
+- Migrated test framework from JUnit 4 to JUnit 5
+- Complete app rename to TiltMate
+- CI/CD improvements with debug keystore generation
+- Better Gradle configuration
+
+## [1.0.0] - 2025-11-09 - Initial Release
 
 ### Added
 - Chess clock functionality with tilt-based control
@@ -56,5 +112,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Material Design UI with ConstraintLayout
 - Keep screen on during gameplay
 
-[Unreleased]: https://github.com/linuxswords/TiltMate/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/linuxswords/TiltMate/compare/v1.6.0...HEAD
+[1.6.0]: https://github.com/linuxswords/TiltMate/compare/v1.5.0...v1.6.0
+[1.5.0]: https://github.com/linuxswords/TiltMate/compare/v1.4.0...v1.5.0
+[1.4.0]: https://github.com/linuxswords/TiltMate/compare/v1.3.0...v1.4.0
+[1.3.0]: https://github.com/linuxswords/TiltMate/compare/v1.2.0...v1.3.0
+[1.2.0]: https://github.com/linuxswords/TiltMate/compare/v1.1.0...v1.2.0
+[1.1.0]: https://github.com/linuxswords/TiltMate/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/linuxswords/TiltMate/releases/tag/v1.0.0
