@@ -113,8 +113,9 @@ public class MainActivity extends Activity implements TiltListener, PlayerClock.
 
     private void toggleSwitch(PlayerClock toActivate, PlayerClock toPause)
     {
-        toActivate.start();
+        toPause.addIncrement();
         toPause.pause();
+        toActivate.start();
         // Ticking continues while one clock is running
         tickingSound.start();
         // Increment move counter

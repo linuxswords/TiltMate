@@ -70,12 +70,17 @@ public class PlayerClock
         this.view.setTextColor(getDynamicTextColor(this.countDownTimer.getRemainingTime()));
     }
 
+    public void addIncrement()
+    {
+        long increment = timeSettingsManager.getCurrent().getIncrement() * 1_000L;
+        if (increment > 0) {
+            this.countDownTimer.increaseTime(increment);
+            this.view.setText(TimeFormatter.convertMillisIntoDisplayableTime(this.countDownTimer.getRemainingTime()));
+        }
+    }
+
     public void pause()
     {
-        // add increment here
-        if (!this.countDownTimer.isPaused()) {
-            this.countDownTimer.increaseTime(timeSettingsManager.getCurrent().getIncrement() * 1_000L);
-        }
         this.countDownTimer.pause();
         this.view.setAlpha(0.5F);
         this.view.setTextColor(getDynamicTextColor(this.countDownTimer.getRemainingTime()));
