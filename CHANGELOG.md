@@ -7,11 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Changed
-- **Advanced Settings Switch Styling** - Enhanced visual feedback
-  - Active switches show green accent color
-  - Inactive switches show transparent/gray color
-  - Applied to both ticking sound and move counter switches
+## [1.6.1] - 2025-12-25
 
 ### Fixed
 - **Increment Timing** - Fixed bug where time increment was added at wrong moment
@@ -112,7 +108,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Material Design UI with ConstraintLayout
 - Keep screen on during gameplay
 
-[Unreleased]: https://github.com/linuxswords/TiltMate/compare/v1.6.0...HEAD
+[Unreleased]: https://github.com/linuxswords/TiltMate/compare/v1.6.1...HEAD
+[1.6.1]: https://github.com/linuxswords/TiltMate/compare/v1.6.0...v1.6.1
 [1.6.0]: https://github.com/linuxswords/TiltMate/compare/v1.5.0...v1.6.0
 [1.5.0]: https://github.com/linuxswords/TiltMate/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/linuxswords/TiltMate/compare/v1.3.0...v1.4.0
