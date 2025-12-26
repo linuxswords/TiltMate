@@ -1,6 +1,7 @@
 package org.linuxswords.games.tiltmate;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 import java.util.stream.Stream;
@@ -23,8 +24,7 @@ class TimeSettingsTest
             arguments(TimeSettings.FIVE_PLUS_FIVE, 5, 5, "5+5", 5L * 60L * 1_000L),
             arguments(TimeSettings.TEN_PLUS_ZERO, 10, 0, "10+0", 10L * 60L * 1_000L),
             arguments(TimeSettings.TEN_PLUS_FIVE, 10, 5, "10+5", 10L * 60L * 1_000L),
-            arguments(TimeSettings.FIFTEEN_PLUS_ZERO, 15, 0, "15+0", 15L * 60L * 1_000L),
-            arguments(TimeSettings.FIFTEEN_PLUS_FIVE, 15, 5, "15+5", 15L * 60L * 1_000L)
+            arguments(TimeSettings.FIFTEEN_PLUS_ZERO, 15, 0, "15+0", 15L * 60L * 1_000L)
         );
     }
 
@@ -52,8 +52,8 @@ class TimeSettingsTest
     @Test
     void testAllTimeSettingsArePresent()
     {
-        TimeSettings[] allSettings = TimeSettings.values();
-        assertThat(allSettings).hasSize(9);
+        TimeSettings[] allSettings = TimeSettings.getPresets();
+        assertThat(allSettings).hasSize(8);
         assertThat(allSettings).contains(
             TimeSettings.TEST,
             TimeSettings.THREE_PLUS_ZERO,
@@ -62,15 +62,78 @@ class TimeSettingsTest
             TimeSettings.FIVE_PLUS_FIVE,
             TimeSettings.TEN_PLUS_ZERO,
             TimeSettings.TEN_PLUS_FIVE,
-            TimeSettings.FIFTEEN_PLUS_ZERO,
-            TimeSettings.FIFTEEN_PLUS_FIVE
+            TimeSettings.FIFTEEN_PLUS_ZERO
         );
     }
 
     @Test
-    void testTimeSettingsEnumValueOf()
+    void testCreateCustom()
     {
-        assertThat(TimeSettings.valueOf("TEN_PLUS_FIVE")).isEqualTo(TimeSettings.TEN_PLUS_FIVE);
-        assertThat(TimeSettings.valueOf("THREE_PLUS_ZERO")).isEqualTo(TimeSettings.THREE_PLUS_ZERO);
+        TimeSettings custom = TimeSettings.createCustom(20, 10);
+        assertThat(custom.getMinutes()).isEqualTo(20);
+        assertThat(custom.getIncrement()).isEqualTo(10);
+        assertThat(custom.minutesAsMilliSeconds()).isEqualTo(20L * 60L * 1_000L);
+    }
+
+    @Test
+    void testCustomLabel()
+    {
+        TimeSettings custom = TimeSettings.createCustom(20, 10);
+        assertThat(custom.getLabel()).isEqualTo("20+10");
+
+        TimeSettings custom2 = TimeSettings.createCustom(1, 0);
+        assertThat(custom2.getLabel()).isEqualTo("1+0");
+    }
+
+    @Test
+    void testCustomEquals()
+    {
+        TimeSettings custom1 = TimeSettings.createCustom(20, 10);
+        TimeSettings custom2 = TimeSettings.createCustom(20, 10);
+        TimeSettings custom3 = TimeSettings.createCustom(15, 5);
+
+        assertThat(custom1).isEqualTo(custom2);
+        assertThat(custom1).isNotEqualTo(custom3);
+        assertThat(custom1.hashCode()).isEqualTo(custom2.hashCode());
+    }
+
+    @Test
+    void testCustomIsCustom()
+    {
+        TimeSettings custom = TimeSettings.createCustom(20, 10);
+        assertThat(custom.isCustom()).isTrue();
+
+        assertThat(TimeSettings.TEN_PLUS_FIVE.isCustom()).isFalse();
+        assertThat(TimeSettings.TEST.isCustom()).isFalse();
+    }
+
+    @Test
+    void testValidation()
+    {
+        // Test invalid minutes
+        assertThatThrownBy(() -> TimeSettings.createCustom(0, 5))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("Minutes must be between 1 and 180");
+
+        assertThatThrownBy(() -> TimeSettings.createCustom(181, 5))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("Minutes must be between 1 and 180");
+
+        // Test invalid increment
+        assertThatThrownBy(() -> TimeSettings.createCustom(10, -1))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("Increment must be between 0 and 60");
+
+        assertThatThrownBy(() -> TimeSettings.createCustom(10, 61))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("Increment must be between 0 and 60");
+
+        // Test valid edge cases
+        TimeSettings min = TimeSettings.createCustom(1, 0);
+        assertThat(min.getMinutes()).isEqualTo(1);
+
+        TimeSettings max = TimeSettings.createCustom(180, 60);
+        assertThat(max.getMinutes()).isEqualTo(180);
+        assertThat(max.getIncrement()).isEqualTo(60);
     }
 }

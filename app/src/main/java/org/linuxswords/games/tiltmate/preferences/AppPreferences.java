@@ -8,6 +8,8 @@ public class AppPreferences
 {
     private static final String PREFS_NAME = "TiltMatePrefs";
     private static final String KEY_TIME_SETTING = "selected_time_setting";
+    private static final String KEY_CUSTOM_MINUTES = "custom_time_minutes";
+    private static final String KEY_CUSTOM_INCREMENT = "custom_time_increment";
     private static final String KEY_TICKING_ENABLED = "ticking_enabled";
     private static final String KEY_TILT_SENSITIVITY = "tilt_sensitivity";
     private static final String KEY_SHOW_MOVES = "show_moves_enabled";
@@ -24,7 +26,22 @@ public class AppPreferences
      */
     public void setTimeSetting(TimeSettings setting)
     {
-        prefs.edit().putString(KEY_TIME_SETTING, setting.name()).apply();
+        SharedPreferences.Editor editor = prefs.edit();
+
+        if (setting.isCustom()) {
+            // Save custom time with separate keys
+            editor.putString(KEY_TIME_SETTING, TimeSettings.CUSTOM_NAME);
+            editor.putInt(KEY_CUSTOM_MINUTES, setting.getMinutes());
+            editor.putInt(KEY_CUSTOM_INCREMENT, setting.getIncrement());
+        } else {
+            // Save preset by name
+            editor.putString(KEY_TIME_SETTING, setting.getName());
+            // Clear custom values to prevent stale data
+            editor.remove(KEY_CUSTOM_MINUTES);
+            editor.remove(KEY_CUSTOM_INCREMENT);
+        }
+
+        editor.apply();
     }
 
     /**
@@ -33,13 +50,34 @@ public class AppPreferences
      */
     public TimeSettings getTimeSetting()
     {
-        String savedName = prefs.getString(KEY_TIME_SETTING, TimeSettings.TEN_PLUS_FIVE.name());
-        try {
-            return TimeSettings.valueOf(savedName);
-        } catch (IllegalArgumentException e) {
-            // If saved value is invalid, return default
-            return TimeSettings.TEN_PLUS_FIVE;
+        String savedName = prefs.getString(KEY_TIME_SETTING, TimeSettings.TEN_PLUS_FIVE.getName());
+
+        // Check if it's a custom time
+        if (TimeSettings.CUSTOM_NAME.equals(savedName)) {
+            int minutes = prefs.getInt(KEY_CUSTOM_MINUTES, 10);
+            int increment = prefs.getInt(KEY_CUSTOM_INCREMENT, 5);
+            try {
+                return TimeSettings.createCustom(minutes, increment);
+            } catch (IllegalArgumentException e) {
+                // If custom values are invalid, return default
+                return TimeSettings.TEN_PLUS_FIVE;
+            }
         }
+
+        // Handle migration from old FIFTEEN_PLUS_FIVE enum
+        if ("FIFTEEN_PLUS_FIVE".equals(savedName)) {
+            return TimeSettings.createCustom(15, 5);
+        }
+
+        // Try to find matching preset
+        for (TimeSettings preset : TimeSettings.getPresets()) {
+            if (preset.getName().equals(savedName)) {
+                return preset;
+            }
+        }
+
+        // If not found, return default
+        return TimeSettings.TEN_PLUS_FIVE;
     }
 
     /**

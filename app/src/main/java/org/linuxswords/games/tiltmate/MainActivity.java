@@ -14,6 +14,7 @@ import org.linuxswords.games.tiltmate.sensor.TiltSensor;
 import org.linuxswords.games.tiltmate.sensor.TiltSensor.TiltListener;
 import org.linuxswords.games.tiltmate.sound.TickingSoundManager;
 import org.linuxswords.games.tiltmate.time.PlayerClock;
+import org.linuxswords.games.tiltmate.time.TimeSettings;
 import org.linuxswords.games.tiltmate.time.TimeSettingsManager;
 
 public class MainActivity extends Activity implements TiltListener, PlayerClock.ClockFinishListener
@@ -134,13 +135,21 @@ public class MainActivity extends Activity implements TiltListener, PlayerClock.
 
     private void restartAllClocks()
     {
-        leftClock.restart().showStartTime();
-        rightClock.restart().showStartTime();
+        // Get the current time setting (in case it changed)
+        TimeSettings current = TimeSettingsManager.instance(this).getCurrent();
+        long currentTime = current.minutesAsMilliSeconds();
+
+        // Reset clocks to current time setting
+        leftClock.setRemainingTime(currentTime);
+        rightClock.setRemainingTime(currentTime);
+
         // Stop ticking on restart (clocks are reset but not running)
         tickingSound.stop();
         // Reset move counter
         moveCount = 0;
         updateMoveCountDisplay();
+
+        Log.d(TAG, "Clocks restarted to current time setting: " + current.getLabel());
     }
 
 
@@ -157,6 +166,19 @@ public class MainActivity extends Activity implements TiltListener, PlayerClock.
 
         // Update move counter visibility in case it was changed in settings
         updateMoveCounterVisibility();
+
+        // Update time display label in case time setting was changed
+        TimeSettings current = TimeSettingsManager.instance(this).getCurrent();
+        Log.d(TAG, "onResume: Current time setting is: " + current.getLabel());
+        ((TextView)findViewById(R.id.timeSettingDisplay)).setText(current.getLabel());
+
+        // Reset clocks to new time if not running
+        if (!leftClock.isRunning() && !rightClock.isRunning()) {
+            long newTime = current.minutesAsMilliSeconds();
+            leftClock.setRemainingTime(newTime);
+            rightClock.setRemainingTime(newTime);
+            Log.d(TAG, "Clocks reset to new time: " + newTime);
+        }
 
         // Restore clock state if a clock was running before we paused
         if (runningClockBeforePause == ClockState.LEFT) {

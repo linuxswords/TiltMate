@@ -61,20 +61,84 @@ class TimeSettingsManagerTest
     @Test
     public void testSetCurrentChangesGlobalState()
     {
-        manager.setCurrent(TimeSettings.FIFTEEN_PLUS_FIVE);
+        manager.setCurrent(TimeSettings.FIFTEEN_PLUS_ZERO);
 
         // Getting instance again should have the same setting
         TimeSettingsManager anotherReference = TimeSettingsManager.instance(context);
-        assertThat(anotherReference.getCurrent()).isEqualTo(TimeSettings.FIFTEEN_PLUS_FIVE);
+        assertThat(anotherReference.getCurrent()).isEqualTo(TimeSettings.FIFTEEN_PLUS_ZERO);
     }
 
     @Test
     public void testAllTimeSettingsCanBeSet()
     {
-        for (TimeSettings setting : TimeSettings.values()) {
+        for (TimeSettings setting : TimeSettings.getPresets()) {
             manager.setCurrent(setting);
             assertThat(manager.getCurrent()).isEqualTo(setting);
         }
+    }
+
+    @Test
+    public void testCustomTimePersistence()
+    {
+        // Create and set a custom time
+        TimeSettings custom = TimeSettings.createCustom(20, 10);
+        manager.setCurrent(custom);
+
+        // Verify it's saved
+        assertThat(manager.getCurrent().getMinutes()).isEqualTo(20);
+        assertThat(manager.getCurrent().getIncrement()).isEqualTo(10);
+        assertThat(manager.getCurrent().isCustom()).isTrue();
+    }
+
+    @Test
+    public void testCustomTimePersistsAcrossInstances()
+    {
+        // Set a custom time
+        TimeSettings custom = TimeSettings.createCustom(25, 15);
+        manager.setCurrent(custom);
+
+        // Create a new manager instance (simulating app restart)
+        TimeSettingsManager newManager = TimeSettingsManager.instance(context);
+
+        // Should load the saved custom time
+        assertThat(newManager.getCurrent().getMinutes()).isEqualTo(25);
+        assertThat(newManager.getCurrent().getIncrement()).isEqualTo(15);
+        assertThat(newManager.getCurrent().isCustom()).isTrue();
+    }
+
+    @Test
+    public void testSwitchingFromCustomToPreset()
+    {
+        // Set a custom time first
+        manager.setCurrent(TimeSettings.createCustom(30, 20));
+        assertThat(manager.getCurrent().isCustom()).isTrue();
+
+        // Switch to a preset
+        manager.setCurrent(TimeSettings.FIVE_PLUS_FIVE);
+        assertThat(manager.getCurrent()).isEqualTo(TimeSettings.FIVE_PLUS_FIVE);
+        assertThat(manager.getCurrent().isCustom()).isFalse();
+
+        // Verify persistence
+        TimeSettingsManager newManager = TimeSettingsManager.instance(context);
+        assertThat(newManager.getCurrent()).isEqualTo(TimeSettings.FIVE_PLUS_FIVE);
+    }
+
+    @Test
+    public void testSwitchingFromPresetToCustom()
+    {
+        // Set a preset first
+        manager.setCurrent(TimeSettings.TEN_PLUS_ZERO);
+        assertThat(manager.getCurrent().isCustom()).isFalse();
+
+        // Switch to custom
+        TimeSettings custom = TimeSettings.createCustom(12, 8);
+        manager.setCurrent(custom);
+        assertThat(manager.getCurrent().isCustom()).isTrue();
+
+        // Verify persistence
+        TimeSettingsManager newManager = TimeSettingsManager.instance(context);
+        assertThat(newManager.getCurrent().getMinutes()).isEqualTo(12);
+        assertThat(newManager.getCurrent().getIncrement()).isEqualTo(8);
     }
 
     @Test
