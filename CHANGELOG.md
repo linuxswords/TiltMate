@@ -7,6 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.0] - 2025-12-26
+
+### Added
+- **Custom Time Controls** - Major new feature allowing user-defined time settings
+  - Create custom time controls with any combination of minutes (1-180) and increment (0-60 seconds)
+  - Custom button with edit icon replaces 15+5 preset in settings grid
+  - Intuitive dialog with side-by-side minute and increment controls
+  - Clear labels explaining "Minutes (initial time)" and "Increment (per move, sec)"
+  - Hold-to-repeat functionality on +/- buttons for faster value adjustment
+  - Custom times persist across app restarts
+  - Dynamic button label shows current custom time (e.g., "20+10") when active
+  - Dialog pre-populates with existing custom time for easy editing
+  - Optimized landscape-friendly layout
+
+### Changed
+- **TimeSettings Architecture** - Refactored from enum to flexible class-based system
+  - Converted to final class with static preset constants maintaining backward compatibility
+  - Added factory method `createCustom()` for creating custom time instances
+  - Implemented content-based equality for custom time comparison
+  - Enhanced persistence layer to support custom time storage in SharedPreferences
+- **Settings UI** - Replaced 15+5 preset button with "Custom" button featuring edit icon
+- **Time Display** - Time setting label now updates immediately when returning from settings
+
+### Fixed
+- **Clock Update on Settings Return** - Clocks now correctly update to new time when returning from settings screen
+- **Restart Behavior** - Double-tap restart now uses current time setting instead of cached value
+- **Migration** - Old 15+5 preset automatically migrates to custom time (15+5) on first launch
+
 ## [1.6.1] - 2025-12-25
 
 ### Fixed
@@ -108,7 +136,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Material Design UI with ConstraintLayout
 - Keep screen on during gameplay
 
-[Unreleased]: https://github.com/linuxswords/TiltMate/compare/v1.6.1...HEAD
+[Unreleased]: https://github.com/linuxswords/TiltMate/compare/v1.7.0...HEAD
+[1.7.0]: https://github.com/linuxswords/TiltMate/compare/v1.6.1...v1.7.0
 [1.6.1]: https://github.com/linuxswords/TiltMate/compare/v1.6.0...v1.6.1
 [1.6.0]: https://github.com/linuxswords/TiltMate/compare/v1.5.0...v1.6.0
 [1.5.0]: https://github.com/linuxswords/TiltMate/compare/v1.4.0...v1.5.0
