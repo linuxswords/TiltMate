@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.8.0] - 2025-12-26
+
+### Changed
+- **FIDE Official Time Controls** - Replaced non-standard presets with FIDE official time controls
+  - **Blitz**: 3+0, 3+2 (new), 5+0, 5+3 (new)
+  - **Rapid**: 10+0, 10+5, 15+10 (new)
+  - Replaced: 3+5 → 3+2, 5+5 → 5+3, 15+0 → 15+10
+  - Old presets automatically migrate to custom times for existing users
+  - All time controls now match FIDE standards for competitive chess
+
+### Fixed
+- **15+10 Button Text** - Reduced font size from 34sp to 30sp to prevent line wrapping
+- **Custom Button Icon Spacing** - Improved spacing between pencil icon and label text
+
 ## [1.7.0] - 2025-12-26
 
 ### Added
@@ -136,7 +150,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Material Design UI with ConstraintLayout
 - Keep screen on during gameplay
 
-[Unreleased]: https://github.com/linuxswords/TiltMate/compare/v1.7.0...HEAD
+[Unreleased]: https://github.com/linuxswords/TiltMate/compare/v1.8.0...HEAD
+[1.8.0]: https://github.com/linuxswords/TiltMate/compare/v1.7.0...v1.8.0
 [1.7.0]: https://github.com/linuxswords/TiltMate/compare/v1.6.1...v1.7.0
 [1.6.1]: https://github.com/linuxswords/TiltMate/compare/v1.6.0...v1.6.1
 [1.6.0]: https://github.com/linuxswords/TiltMate/compare/v1.5.0...v1.6.0
