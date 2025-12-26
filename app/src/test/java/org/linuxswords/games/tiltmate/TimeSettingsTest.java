@@ -18,13 +18,15 @@ class TimeSettingsTest
     {
         return Stream.of(
             arguments(TimeSettings.TEST, 2, 0, "2+0", 2L * 60L * 1_000L),
+            // Blitz (FIDE official)
             arguments(TimeSettings.THREE_PLUS_ZERO, 3, 0, "3+0", 3L * 60L * 1_000L),
-            arguments(TimeSettings.THREE_PLUS_FIVE, 3, 5, "3+5", 3L * 60L * 1_000L),
+            arguments(TimeSettings.THREE_PLUS_TWO, 3, 2, "3+2", 3L * 60L * 1_000L),
             arguments(TimeSettings.FIVE_PLUS_ZERO, 5, 0, "5+0", 5L * 60L * 1_000L),
-            arguments(TimeSettings.FIVE_PLUS_FIVE, 5, 5, "5+5", 5L * 60L * 1_000L),
+            arguments(TimeSettings.FIVE_PLUS_THREE, 5, 3, "5+3", 5L * 60L * 1_000L),
+            // Rapid (FIDE official)
             arguments(TimeSettings.TEN_PLUS_ZERO, 10, 0, "10+0", 10L * 60L * 1_000L),
             arguments(TimeSettings.TEN_PLUS_FIVE, 10, 5, "10+5", 10L * 60L * 1_000L),
-            arguments(TimeSettings.FIFTEEN_PLUS_ZERO, 15, 0, "15+0", 15L * 60L * 1_000L)
+            arguments(TimeSettings.FIFTEEN_PLUS_TEN, 15, 10, "15+10", 15L * 60L * 1_000L)
         );
     }
 
@@ -57,12 +59,12 @@ class TimeSettingsTest
         assertThat(allSettings).contains(
             TimeSettings.TEST,
             TimeSettings.THREE_PLUS_ZERO,
-            TimeSettings.THREE_PLUS_FIVE,
+            TimeSettings.THREE_PLUS_TWO,
             TimeSettings.FIVE_PLUS_ZERO,
-            TimeSettings.FIVE_PLUS_FIVE,
+            TimeSettings.FIVE_PLUS_THREE,
             TimeSettings.TEN_PLUS_ZERO,
             TimeSettings.TEN_PLUS_FIVE,
-            TimeSettings.FIFTEEN_PLUS_ZERO
+            TimeSettings.FIFTEEN_PLUS_TEN
         );
     }
 

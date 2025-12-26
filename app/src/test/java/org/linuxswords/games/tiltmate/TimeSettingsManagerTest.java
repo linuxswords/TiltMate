@@ -54,18 +54,18 @@ class TimeSettingsManagerTest
         manager.setCurrent(TimeSettings.FIVE_PLUS_ZERO);
         assertThat(manager.getCurrent()).isEqualTo(TimeSettings.FIVE_PLUS_ZERO);
 
-        manager.setCurrent(TimeSettings.THREE_PLUS_FIVE);
-        assertThat(manager.getCurrent()).isEqualTo(TimeSettings.THREE_PLUS_FIVE);
+        manager.setCurrent(TimeSettings.THREE_PLUS_TWO);
+        assertThat(manager.getCurrent()).isEqualTo(TimeSettings.THREE_PLUS_TWO);
     }
 
     @Test
     public void testSetCurrentChangesGlobalState()
     {
-        manager.setCurrent(TimeSettings.FIFTEEN_PLUS_ZERO);
+        manager.setCurrent(TimeSettings.FIFTEEN_PLUS_TEN);
 
         // Getting instance again should have the same setting
         TimeSettingsManager anotherReference = TimeSettingsManager.instance(context);
-        assertThat(anotherReference.getCurrent()).isEqualTo(TimeSettings.FIFTEEN_PLUS_ZERO);
+        assertThat(anotherReference.getCurrent()).isEqualTo(TimeSettings.FIFTEEN_PLUS_TEN);
     }
 
     @Test
@@ -114,13 +114,13 @@ class TimeSettingsManagerTest
         assertThat(manager.getCurrent().isCustom()).isTrue();
 
         // Switch to a preset
-        manager.setCurrent(TimeSettings.FIVE_PLUS_FIVE);
-        assertThat(manager.getCurrent()).isEqualTo(TimeSettings.FIVE_PLUS_FIVE);
+        manager.setCurrent(TimeSettings.FIVE_PLUS_THREE);
+        assertThat(manager.getCurrent()).isEqualTo(TimeSettings.FIVE_PLUS_THREE);
         assertThat(manager.getCurrent().isCustom()).isFalse();
 
         // Verify persistence
         TimeSettingsManager newManager = TimeSettingsManager.instance(context);
-        assertThat(newManager.getCurrent()).isEqualTo(TimeSettings.FIVE_PLUS_FIVE);
+        assertThat(newManager.getCurrent()).isEqualTo(TimeSettings.FIVE_PLUS_THREE);
     }
 
     @Test

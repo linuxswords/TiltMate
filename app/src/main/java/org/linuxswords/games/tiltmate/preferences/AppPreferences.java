@@ -64,9 +64,18 @@ public class AppPreferences
             }
         }
 
-        // Handle migration from old FIFTEEN_PLUS_FIVE enum
+        // Handle migration from old presets that were replaced with FIDE times
         if ("FIFTEEN_PLUS_FIVE".equals(savedName)) {
             return TimeSettings.createCustom(15, 5);
+        }
+        if ("THREE_PLUS_FIVE".equals(savedName)) {
+            return TimeSettings.createCustom(3, 5);
+        }
+        if ("FIVE_PLUS_FIVE".equals(savedName)) {
+            return TimeSettings.createCustom(5, 5);
+        }
+        if ("FIFTEEN_PLUS_ZERO".equals(savedName)) {
+            return TimeSettings.createCustom(15, 0);
         }
 
         // Try to find matching preset

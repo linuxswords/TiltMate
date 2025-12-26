@@ -63,16 +63,18 @@ public class SettingsActivity extends Activity
 
     private void setupTimeSettingsButtons()
     {
+        // Blitz presets (FIDE official)
         findViewById(R.id.timeSettingThreeZero).setOnClickListener(v -> this.setTimeAndCloseView(TimeSettings.THREE_PLUS_ZERO));
-        findViewById(R.id.timeSettingThreePlusFive).setOnClickListener(v -> this.setTimeAndCloseView(TimeSettings.THREE_PLUS_FIVE));
+        findViewById(R.id.timeSettingThreePlusTwo).setOnClickListener(v -> this.setTimeAndCloseView(TimeSettings.THREE_PLUS_TWO));
 
         findViewById(R.id.timeSettingFiveZero).setOnClickListener(v -> this.setTimeAndCloseView(TimeSettings.FIVE_PLUS_ZERO));
-        findViewById(R.id.timeSettingFivePlusFive).setOnClickListener(v -> this.setTimeAndCloseView(TimeSettings.FIVE_PLUS_FIVE));
+        findViewById(R.id.timeSettingFivePlusThree).setOnClickListener(v -> this.setTimeAndCloseView(TimeSettings.FIVE_PLUS_THREE));
 
+        // Rapid presets (FIDE official)
         findViewById(R.id.timeSettingTenZero).setOnClickListener(v -> this.setTimeAndCloseView(TimeSettings.TEN_PLUS_ZERO));
         findViewById(R.id.timeSettingTenPlusFive).setOnClickListener(v -> this.setTimeAndCloseView(TimeSettings.TEN_PLUS_FIVE));
 
-        findViewById(R.id.timeSettingFifteenZero).setOnClickListener(v -> this.setTimeAndCloseView(TimeSettings.FIFTEEN_PLUS_ZERO));
+        findViewById(R.id.timeSettingFifteenPlusTen).setOnClickListener(v -> this.setTimeAndCloseView(TimeSettings.FIFTEEN_PLUS_TEN));
     }
 
     private void setupCustomTimeButton()

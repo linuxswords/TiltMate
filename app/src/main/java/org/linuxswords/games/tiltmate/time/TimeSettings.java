@@ -4,15 +4,17 @@ import java.util.Objects;
 
 public final class TimeSettings
 {
-    // Predefined preset constants (singleton-like instances)
+    // Predefined preset constants (FIDE official time controls)
     public static final TimeSettings TEST = new TimeSettings(2, 0, "2+0", "TEST");
+    // Blitz
     public static final TimeSettings THREE_PLUS_ZERO = new TimeSettings(3, 0, "3+0", "THREE_PLUS_ZERO");
-    public static final TimeSettings THREE_PLUS_FIVE = new TimeSettings(3, 5, "3+5", "THREE_PLUS_FIVE");
+    public static final TimeSettings THREE_PLUS_TWO = new TimeSettings(3, 2, "3+2", "THREE_PLUS_TWO");
     public static final TimeSettings FIVE_PLUS_ZERO = new TimeSettings(5, 0, "5+0", "FIVE_PLUS_ZERO");
-    public static final TimeSettings FIVE_PLUS_FIVE = new TimeSettings(5, 5, "5+5", "FIVE_PLUS_FIVE");
+    public static final TimeSettings FIVE_PLUS_THREE = new TimeSettings(5, 3, "5+3", "FIVE_PLUS_THREE");
+    // Rapid
     public static final TimeSettings TEN_PLUS_ZERO = new TimeSettings(10, 0, "10+0", "TEN_PLUS_ZERO");
     public static final TimeSettings TEN_PLUS_FIVE = new TimeSettings(10, 5, "10+5", "TEN_PLUS_FIVE");
-    public static final TimeSettings FIFTEEN_PLUS_ZERO = new TimeSettings(15, 0, "15+0", "FIFTEEN_PLUS_ZERO");
+    public static final TimeSettings FIFTEEN_PLUS_TEN = new TimeSettings(15, 10, "15+10", "FIFTEEN_PLUS_TEN");
 
     // Special marker for custom times
     public static final String CUSTOM_NAME = "CUSTOM";
@@ -59,12 +61,12 @@ public final class TimeSettings
         return new TimeSettings[] {
             TEST,
             THREE_PLUS_ZERO,
-            THREE_PLUS_FIVE,
+            THREE_PLUS_TWO,
             FIVE_PLUS_ZERO,
-            FIVE_PLUS_FIVE,
+            FIVE_PLUS_THREE,
             TEN_PLUS_ZERO,
             TEN_PLUS_FIVE,
-            FIFTEEN_PLUS_ZERO
+            FIFTEEN_PLUS_TEN
         };
     }
 
