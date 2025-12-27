@@ -40,6 +40,19 @@ public class SettingsActivity extends Activity
             });
         }
 
+        // info button
+        android.view.View infoButton = findViewById(R.id.infoButton);
+        Log.d(TAG, "infoButton found: " + (infoButton != null));
+        if (infoButton != null) {
+            infoButton.setOnClickListener(v -> {
+                Log.d(TAG, "Info button clicked");
+                startActivity(new Intent(this, InfoActivity.class));
+            });
+        }
+
+        // Force white color on all right-side button icons
+        ensureButtonIconsWhite();
+
         // exit (now returns to game - has revert icon)
         android.view.View exitButton = findViewById(R.id.exitButton);
         Log.d(TAG, "exitButton found: " + (exitButton != null));
@@ -230,5 +243,21 @@ public class SettingsActivity extends Activity
         timeSettingsManager.setCurrent(timeSetting);
         Log.d(TAG, "TimeSettings saved, current is now: " + timeSettingsManager.getCurrent().getLabel());
         finish();  // Return to existing MainActivity instead of creating new one
+    }
+
+    private void ensureButtonIconsWhite()
+    {
+        // Force all button icons to use pure white color with full opacity
+        int whiteColor = 0xFFFFFFFF; // Full opacity white
+
+        com.google.android.material.button.MaterialButton exitButton = findViewById(R.id.exitButton);
+        com.google.android.material.button.MaterialButton advancedButton = findViewById(R.id.advancedSettingsButton);
+        com.google.android.material.button.MaterialButton infoButton = findViewById(R.id.infoButton);
+        com.google.android.material.button.MaterialButton cancelButton = findViewById(R.id.settingsCancelButton);
+
+        if (exitButton != null) exitButton.setIconTint(android.content.res.ColorStateList.valueOf(whiteColor));
+        if (advancedButton != null) advancedButton.setIconTint(android.content.res.ColorStateList.valueOf(whiteColor));
+        if (infoButton != null) infoButton.setIconTint(android.content.res.ColorStateList.valueOf(whiteColor));
+        if (cancelButton != null) cancelButton.setIconTint(android.content.res.ColorStateList.valueOf(whiteColor));
     }
 }

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="#403E3E"
+  android:fillViewport="true">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:paddingBottom="40dp"
+  tools:context=".InfoActivity">
+
+  <TextView
+    android:id="@+id/infoTitle"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="20dp"
+    android:text="About TiltMate"
+    android:textColor="#FFFFFF"
+    android:textSize="32sp"
+    android:textStyle="bold"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"/>
+
+  <!-- App Description -->
+  <TextView
+    android:id="@+id/infoDescription"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="60dp"
+    android:layout_marginTop="25dp"
+    android:layout_marginEnd="60dp"
+    android:text="A chess clock app based on tilting the phone. Put your phone onto something that can be tilted and instead of pressing a button you tilt your phone, like a seesaw!"
+    android:textColor="#FFFFFF"
+    android:textSize="18sp"
+    android:gravity="center"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/infoTitle"/>
+
+  <!-- App Version -->
+  <TextView
+    android:id="@+id/versionLabel"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="20dp"
+    android:text="Version"
+    android:textColor="#BBBBBB"
+    android:textSize="16sp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/infoDescription"/>
+
+  <TextView
+    android:id="@+id/versionValue"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="5dp"
+    android:text="1.8.0"
+    android:textColor="#FFFFFF"
+    android:textSize="24sp"
+    android:textStyle="bold"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/versionLabel"/>
+
+  <!-- Like the app label -->
+  <TextView
+    android:id="@+id/likeAppLabel"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="25dp"
+    android:text="Like the app?"
+    android:textColor="#BBBBBB"
+    android:textSize="16sp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/versionValue"/>
+
+  <!-- Donate Button -->
+  <com.google.android.material.button.MaterialButton
+    android:id="@+id/donateButton"
+    android:layout_width="250dp"
+    android:layout_height="65dp"
+    android:layout_marginTop="10dp"
+    android:text="Buy me a coffee"
+    android:textColor="#FFFFFF"
+    android:textSize="20sp"
+    android:theme="@style/Theme.MaterialComponents"
+    app:backgroundTint="#FF813F"
+    app:cornerRadius="8dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/likeAppLabel"
+    app:rippleColor="#33AAAAAA"
+    app:strokeColor="#FFFFFF"
+    app:strokeWidth="2dp"/>
+
+  <!-- Back button in top-right corner -->
+  <com.google.android.material.button.MaterialButton
+    android:id="@+id/infoBackButton"
+    android:layout_width="60dp"
+    android:layout_height="60dp"
+    android:theme="@style/Theme.MaterialComponents"
+    app:backgroundTint="@android:color/transparent"
+    app:icon="@drawable/ic_return_white"
+    app:iconTint="#FFFFFF"
+    app:iconTintMode="src_in"
+    app:iconGravity="textStart"
+    app:iconPadding="0dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintHorizontal_bias="0.922"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintVertical_bias="0.02"
+    app:rippleColor="#33AAAAAA"
+    app:strokeColor="#FFFFFF"
+    app:strokeWidth="0dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
