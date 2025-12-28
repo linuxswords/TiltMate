@@ -15,6 +15,7 @@ public class InfoActivity extends Activity
 {
     private static final String TAG = "InfoActivity";
     private static final String DONATE_URL = "https://buymeacoffee.com/linuxswords";
+    private static final String GITHUB_URL = "https://github.com/linuxswords/TiltMate";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -25,6 +26,7 @@ public class InfoActivity extends Activity
 
         setupVersionDisplay();
         setupDonateButton();
+        setupGitHubButton();
 
         // Back button returns to settings screen
         findViewById(R.id.infoBackButton).setOnClickListener(v -> {
@@ -51,6 +53,16 @@ public class InfoActivity extends Activity
         donateButton.setOnClickListener(v -> {
             Log.d(TAG, "Donate button clicked - opening: " + DONATE_URL);
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(DONATE_URL));
+            startActivity(browserIntent);
+        });
+    }
+
+    private void setupGitHubButton()
+    {
+        MaterialButton githubButton = findViewById(R.id.githubButton);
+        githubButton.setOnClickListener(v -> {
+            Log.d(TAG, "GitHub button clicked - opening: " + GITHUB_URL);
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(GITHUB_URL));
             startActivity(browserIntent);
         });
     }

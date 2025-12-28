@@ -11,17 +11,17 @@
 <androidx.constraintlayout.widget.ConstraintLayout
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:paddingBottom="40dp"
+  android:paddingBottom="20dp"
   tools:context=".InfoActivity">
 
   <TextView
     android:id="@+id/infoTitle"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginTop="20dp"
+    android:layout_marginTop="16dp"
     android:text="About TiltMate"
     android:textColor="#FFFFFF"
-    android:textSize="32sp"
+    android:textSize="28sp"
     android:textStyle="bold"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
@@ -32,27 +32,29 @@
     android:id="@+id/infoDescription"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
-    android:layout_marginStart="60dp"
-    android:layout_marginTop="25dp"
-    android:layout_marginEnd="60dp"
+    android:layout_marginStart="50dp"
+    android:layout_marginTop="12dp"
+    android:layout_marginEnd="50dp"
     android:text="A chess clock app based on tilting the phone. Put your phone onto something that can be tilted and instead of pressing a button you tilt your phone, like a seesaw!"
     android:textColor="#FFFFFF"
-    android:textSize="18sp"
+    android:textSize="16sp"
     android:gravity="center"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/infoTitle"/>
 
-  <!-- App Version -->
+  <!-- App Version (inline) -->
   <TextView
     android:id="@+id/versionLabel"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginTop="20dp"
+    android:layout_marginTop="14dp"
+    android:layout_marginEnd="8dp"
     android:text="Version"
     android:textColor="#BBBBBB"
-    android:textSize="16sp"
-    app:layout_constraintEnd_toEndOf="parent"
+    android:textSize="20sp"
+    app:layout_constraintEnd_toStartOf="@+id/versionValue"
+    app:layout_constraintHorizontal_chainStyle="packed"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/infoDescription"/>
 
@@ -60,37 +62,73 @@
     android:id="@+id/versionValue"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginTop="5dp"
+    android:layout_marginTop="14dp"
     android:text="1.9.0"
     android:textColor="#FFFFFF"
-    android:textSize="24sp"
+    android:textSize="20sp"
     android:textStyle="bold"
     app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toEndOf="@+id/versionLabel"
+    app:layout_constraintTop_toBottomOf="@+id/infoDescription"/>
+
+  <!-- Open Source label -->
+  <TextView
+    android:id="@+id/openSourceLabel"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="14dp"
+    android:text="Open Source"
+    android:textColor="#BBBBBB"
+    android:textSize="15sp"
+    app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/versionLabel"/>
+    app:layout_constraintTop_toBottomOf="@+id/versionValue"/>
+
+  <!-- GitHub Button -->
+  <com.google.android.material.button.MaterialButton
+    android:id="@+id/githubButton"
+    android:layout_width="240dp"
+    android:layout_height="52dp"
+    android:layout_marginTop="6dp"
+    android:text="View on GitHub"
+    android:textColor="#FFFFFF"
+    android:textSize="16sp"
+    android:theme="@style/Theme.MaterialComponents"
+    app:backgroundTint="#24292e"
+    app:cornerRadius="8dp"
+    app:icon="@drawable/ic_github"
+    app:iconGravity="textStart"
+    app:iconPadding="6dp"
+    app:iconSize="22dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/openSourceLabel"
+    app:rippleColor="#33AAAAAA"
+    app:strokeColor="#FFFFFF"
+    app:strokeWidth="2dp"/>
 
   <!-- Like the app label -->
   <TextView
     android:id="@+id/likeAppLabel"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginTop="25dp"
+    android:layout_marginTop="14dp"
     android:text="Like the app?"
     android:textColor="#BBBBBB"
-    android:textSize="16sp"
+    android:textSize="15sp"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/versionValue"/>
+    app:layout_constraintTop_toBottomOf="@+id/githubButton"/>
 
   <!-- Donate Button -->
   <com.google.android.material.button.MaterialButton
     android:id="@+id/donateButton"
-    android:layout_width="250dp"
-    android:layout_height="65dp"
-    android:layout_marginTop="10dp"
+    android:layout_width="240dp"
+    android:layout_height="52dp"
+    android:layout_marginTop="6dp"
     android:text="Buy me a coffee"
     android:textColor="#FFFFFF"
-    android:textSize="20sp"
+    android:textSize="16sp"
     android:theme="@style/Theme.MaterialComponents"
     app:backgroundTint="#FF813F"
     app:cornerRadius="8dp"
