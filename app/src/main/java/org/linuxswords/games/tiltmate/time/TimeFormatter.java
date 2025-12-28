@@ -4,7 +4,7 @@ import java.util.concurrent.TimeUnit;
 
 public class TimeFormatter
 {
-    public static final String DISPLAY_TIME_FORMAT = "%d:%02d";  // make this configurable
+    private static final String DISPLAY_TIME_FORMAT = "%d:%02d";  // make this configurable
 
 
     public static String convertMillisIntoDisplayableTime(Long millisUntilFinished)

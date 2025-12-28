@@ -14,10 +14,13 @@ import org.linuxswords.games.tiltmate.time.TimeSettings;
 
 class TimeSettingsTest
 {
+    // Test-only constant for testing purposes
+    private static final TimeSettings TEST = TimeSettings.createCustom(2, 0);
+
     static Stream<Arguments> timeSettingsProvider()
     {
         return Stream.of(
-            arguments(TimeSettings.TEST, 2, 0, "2+0", 2L * 60L * 1_000L),
+            arguments(TEST, 2, 0, "2+0", 2L * 60L * 1_000L),
             // Blitz (FIDE official)
             arguments(TimeSettings.THREE_PLUS_ZERO, 3, 0, "3+0", 3L * 60L * 1_000L),
             arguments(TimeSettings.THREE_PLUS_TWO, 3, 2, "3+2", 3L * 60L * 1_000L),
@@ -55,9 +58,8 @@ class TimeSettingsTest
     void testAllTimeSettingsArePresent()
     {
         TimeSettings[] allSettings = TimeSettings.getPresets();
-        assertThat(allSettings).hasSize(8);
+        assertThat(allSettings).hasSize(7);
         assertThat(allSettings).contains(
-            TimeSettings.TEST,
             TimeSettings.THREE_PLUS_ZERO,
             TimeSettings.THREE_PLUS_TWO,
             TimeSettings.FIVE_PLUS_ZERO,
@@ -106,7 +108,7 @@ class TimeSettingsTest
         assertThat(custom.isCustom()).isTrue();
 
         assertThat(TimeSettings.TEN_PLUS_FIVE.isCustom()).isFalse();
-        assertThat(TimeSettings.TEST.isCustom()).isFalse();
+        assertThat(TimeSettings.THREE_PLUS_ZERO.isCustom()).isFalse();
     }
 
     @Test

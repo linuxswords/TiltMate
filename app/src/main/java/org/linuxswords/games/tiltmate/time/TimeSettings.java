@@ -5,7 +5,6 @@ import java.util.Objects;
 public final class TimeSettings
 {
     // Predefined preset constants (FIDE official time controls)
-    public static final TimeSettings TEST = new TimeSettings(2, 0, "2+0", "TEST");
     // Blitz
     public static final TimeSettings THREE_PLUS_ZERO = new TimeSettings(3, 0, "3+0", "THREE_PLUS_ZERO");
     public static final TimeSettings THREE_PLUS_TWO = new TimeSettings(3, 2, "3+2", "THREE_PLUS_TWO");
@@ -59,7 +58,6 @@ public final class TimeSettings
     public static TimeSettings[] getPresets()
     {
         return new TimeSettings[] {
-            TEST,
             THREE_PLUS_ZERO,
             THREE_PLUS_TWO,
             FIVE_PLUS_ZERO,
