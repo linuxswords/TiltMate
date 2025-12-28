@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.9.1] - 2025-12-28
+
+### Added
+- **Open Source Info** - Added GitHub link with logo to info screen
+  - New "Open Source" section with "View on GitHub" button
+  - GitHub button opens project repository in browser
+  - Positioned before donation section for better visibility
+
+### Changed
+- **Compact Info Layout** - Optimized info screen to fit in single viewport
+  - Version label now inline with version number
+  - Reduced spacing and font sizes throughout
+  - All content visible without scrolling
+  - Improved information hierarchy
+
+## [1.9.0] - 2025-12-27
+
+### Added
+- **Info Section** - New dedicated info/about screen accessible from settings
+  - App description and version information
+  - Donation link with "Buy me a coffee" button
+  - Professional layout with consistent styling
+
 ## [1.8.0] - 2025-12-26
 
 ### Changed
