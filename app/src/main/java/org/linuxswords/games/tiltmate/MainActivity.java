@@ -112,7 +112,21 @@ public class MainActivity extends Activity implements TiltListener, PlayerClock.
                     gameStarted = true;
                     tapToStartIndicator.setVisibility(View.GONE);
                 } else if (gameStarted) {
-                    pauseAllClocks();
+                    // Check if clocks are paused (both not running)
+                    if (!leftClock.isRunning() && !rightClock.isRunning()) {
+                        // Resume the clock based on current tilt direction
+                        if (currentTiltDegree != 0) {
+                            if (currentTiltDegree < 0) {
+                                leftClock.start();
+                            } else {
+                                rightClock.start();
+                            }
+                            tickingSound.start();
+                        }
+                    } else {
+                        // A clock is running, so pause
+                        pauseAllClocks();
+                    }
                 }
             }
 
