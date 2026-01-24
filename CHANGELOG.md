@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.0] - 2026-01-24
+
+### Added
+- **Tap to Start Clock** - New alternative way to start the game clock
+  - Tap either player's clock area to begin the game
+  - Provides a more intuitive start option alongside tilt controls
+
 ## [1.9.1] - 2025-12-28
 
 ### Added
@@ -173,7 +180,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Material Design UI with ConstraintLayout
 - Keep screen on during gameplay
 
-[Unreleased]: https://github.com/linuxswords/TiltMate/compare/v1.8.0...HEAD
+[Unreleased]: https://github.com/linuxswords/TiltMate/compare/v1.10.0...HEAD
+[1.10.0]: https://github.com/linuxswords/TiltMate/compare/v1.9.1...v1.10.0
+[1.9.1]: https://github.com/linuxswords/TiltMate/compare/v1.9.0...v1.9.1
+[1.9.0]: https://github.com/linuxswords/TiltMate/compare/v1.8.0...v1.9.0
 [1.8.0]: https://github.com/linuxswords/TiltMate/compare/v1.7.0...v1.8.0
 [1.7.0]: https://github.com/linuxswords/TiltMate/compare/v1.6.1...v1.7.0
 [1.6.1]: https://github.com/linuxswords/TiltMate/compare/v1.6.0...v1.6.1
