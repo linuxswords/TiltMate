@@ -22,6 +22,7 @@ public class MainActivity extends Activity implements TiltListener, PlayerClock.
     private static final String TAG = "MainActivity";
     private int currentTiltDegree = 0;
     private int moveCount = 0;
+    private boolean gameStarted = false;
 
     private PlayerClock leftClock;
     private PlayerClock rightClock;
@@ -29,6 +30,7 @@ public class MainActivity extends Activity implements TiltListener, PlayerClock.
     private AppPreferences preferences;
     private TickingSoundManager tickingSound;
     private TextView moveCountDisplay;
+    private TextView tapToStartIndicator;
 
     // Track which clock was running before pausing (for settings navigation)
     private enum ClockState { NONE, LEFT, RIGHT }
@@ -69,16 +71,20 @@ public class MainActivity extends Activity implements TiltListener, PlayerClock.
         moveCountDisplay = findViewById(R.id.moveCountDisplay);
         updateMoveCounterVisibility();
 
+        // Initialize tap to start indicator
+        tapToStartIndicator = findViewById(R.id.tapToStartIndicator);
+
         // Restore saved state if available
         if (savedInstanceState != null) {
             long leftTime = savedInstanceState.getLong("leftClockTime", -1);
             long rightTime = savedInstanceState.getLong("rightClockTime", -1);
             int savedMoveCount = savedInstanceState.getInt("moveCount", 0);
             String runningClock = savedInstanceState.getString("runningClock", "NONE");
+            boolean savedGameStarted = savedInstanceState.getBoolean("gameStarted", false);
 
             if (leftTime > 0 && rightTime > 0) {
                 // Restore clock times
-                restoreClockState(leftTime, rightTime, savedMoveCount, runningClock);
+                restoreClockState(leftTime, rightTime, savedMoveCount, runningClock, savedGameStarted);
             } else {
                 leftClock.showStartTime();
                 rightClock.showStartTime();
@@ -94,7 +100,20 @@ public class MainActivity extends Activity implements TiltListener, PlayerClock.
             @Override
             public void onSingleClick(View v)
             {
-                pauseAllClocks();
+                // At game start (neither clock running, game not started), single tap starts
+                // the upward-facing clock (like black starting white's clock)
+                if (!gameStarted && currentTiltDegree != 0) {
+                    if (currentTiltDegree < 0) {
+                        leftClock.start();
+                    } else {
+                        rightClock.start();
+                    }
+                    tickingSound.start();
+                    gameStarted = true;
+                    tapToStartIndicator.setVisibility(View.GONE);
+                } else if (gameStarted) {
+                    pauseAllClocks();
+                }
             }
 
             @Override
@@ -148,6 +167,9 @@ public class MainActivity extends Activity implements TiltListener, PlayerClock.
         // Reset move counter
         moveCount = 0;
         updateMoveCountDisplay();
+        // Reset game started state and show indicator
+        gameStarted = false;
+        tapToStartIndicator.setVisibility(View.VISIBLE);
 
         Log.d(TAG, "Clocks restarted to current time setting: " + current.getLabel());
     }
@@ -219,6 +241,7 @@ public class MainActivity extends Activity implements TiltListener, PlayerClock.
         outState.putLong("leftClockTime", leftClock.getRemainingTime());
         outState.putLong("rightClockTime", rightClock.getRemainingTime());
         outState.putInt("moveCount", moveCount);
+        outState.putBoolean("gameStarted", gameStarted);
 
         // Save which clock is running
         if (leftClock.isRunning()) {
@@ -240,7 +263,7 @@ public class MainActivity extends Activity implements TiltListener, PlayerClock.
         }
     }
 
-    private void restoreClockState(long leftTime, long rightTime, int savedMoveCount, String runningClock)
+    private void restoreClockState(long leftTime, long rightTime, int savedMoveCount, String runningClock, boolean savedGameStarted)
     {
         // Restore times
         leftClock.setRemainingTime(leftTime);
@@ -249,6 +272,10 @@ public class MainActivity extends Activity implements TiltListener, PlayerClock.
         // Restore move count
         moveCount = savedMoveCount;
         updateMoveCountDisplay();
+
+        // Restore game started state and indicator
+        gameStarted = savedGameStarted;
+        tapToStartIndicator.setVisibility(gameStarted ? View.GONE : View.VISIBLE);
 
         // Restore running state
         if ("LEFT".equals(runningClock)) {
@@ -269,16 +296,18 @@ public class MainActivity extends Activity implements TiltListener, PlayerClock.
             }
             else if (Math.signum(currentTiltDegree) != Math.signum(degree)) {
                 currentTiltDegree = degree;
-                Log.d(TAG, "tilted from " + currentTiltDegree + " to " + degree);
-                if (Math.signum(currentTiltDegree) == -1) {
-                    toggleSwitch(leftClock, rightClock);
-                }
-                else {
-                    toggleSwitch(rightClock, leftClock);
+                // Only switch clocks if game has been started with a tap
+                if (gameStarted) {
+                    Log.d(TAG, "tilted from " + currentTiltDegree + " to " + degree);
+                    if (Math.signum(currentTiltDegree) == -1) {
+                        toggleSwitch(leftClock, rightClock);
+                    }
+                    else {
+                        toggleSwitch(rightClock, leftClock);
+                    }
                 }
             }
         }
-
     }
 
     @Override
