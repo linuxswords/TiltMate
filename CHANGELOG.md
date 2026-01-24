@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.11.0] - 2026-01-24
+
+### Added
+- **Tap to Resume** - Single tap now toggles pause/resume during gameplay
+  - Tap to pause a running clock (existing behavior)
+  - Tap again to resume the paused clock based on current tilt direction
+  - Provides intuitive pause/resume control without needing to tilt
+
 ## [1.10.0] - 2026-01-24
 
 ### Added
@@ -180,7 +188,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Material Design UI with ConstraintLayout
 - Keep screen on during gameplay
 
-[Unreleased]: https://github.com/linuxswords/TiltMate/compare/v1.10.0...HEAD
+[Unreleased]: https://github.com/linuxswords/TiltMate/compare/v1.11.0...HEAD
+[1.11.0]: https://github.com/linuxswords/TiltMate/compare/v1.10.0...v1.11.0
 [1.10.0]: https://github.com/linuxswords/TiltMate/compare/v1.9.1...v1.10.0
 [1.9.1]: https://github.com/linuxswords/TiltMate/compare/v1.9.0...v1.9.1
 [1.9.0]: https://github.com/linuxswords/TiltMate/compare/v1.8.0...v1.9.0
