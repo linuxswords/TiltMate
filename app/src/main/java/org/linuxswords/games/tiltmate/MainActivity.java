@@ -23,6 +23,7 @@ public class MainActivity extends Activity implements TiltListener, PlayerClock.
     private int currentTiltDegree = 0;
     private int moveCount = 0;
     private boolean gameStarted = false;
+    private boolean gameFinished = false;
 
     private PlayerClock leftClock;
     private PlayerClock rightClock;
@@ -183,6 +184,7 @@ public class MainActivity extends Activity implements TiltListener, PlayerClock.
         updateMoveCountDisplay();
         // Reset game started state and show indicator
         gameStarted = false;
+        gameFinished = false;
         tapToStartIndicator.setVisibility(View.VISIBLE);
 
         Log.d(TAG, "Clocks restarted to current time setting: " + current.getLabel());
@@ -304,6 +306,10 @@ public class MainActivity extends Activity implements TiltListener, PlayerClock.
     @Override
     public void onTilt(int degree)
     {
+        // Ignore tilts if game has finished (time ran out)
+        if (gameFinished) {
+            return;
+        }
         if (degree != 0) {
             if (currentTiltDegree == 0) {
                 currentTiltDegree = degree;
@@ -329,6 +335,8 @@ public class MainActivity extends Activity implements TiltListener, PlayerClock.
     {
         // Stop ticking sound when time runs out
         tickingSound.stop();
+        // Ignore tilts until clock is reset
+        gameFinished = true;
         Log.d(TAG, "Clock finished - ticking sound stopped");
     }
 
