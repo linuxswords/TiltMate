@@ -58,24 +58,16 @@ public class TiltSensor implements SensorEventListener
 
     private final SensorManager sensorManager;
     private final Sensor accelerometer;
-    private final Sensor magnetometer;
     private float[] mGravity;
-    private float[] mGeomagnetic;
     private int sensitivityThreshold = THRESHOLD_MEDIUM; // Default: medium
 
-    // create constructor with context as argument
     public TiltSensor(Context context)
     {
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         if (accelerometer == null) {
-            Log.d(TAG, "accelerometer is null");
+            Log.w(TAG, "accelerometer is null");
         }
-        magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-        if (magnetometer == null) {
-            Log.d(TAG, "magnetometer is null");
-        }
-
     }
 
     @Override
@@ -85,43 +77,22 @@ public class TiltSensor implements SensorEventListener
             Log.w(TAG, "event.values is null");
             return;
         }
-        int sensorType = event.sensor.getType();
-        switch (sensorType) {
-            case Sensor.TYPE_ACCELEROMETER:
-                mGravity = applyLowPassFilter(mGravity, event.values);
-                break;
-            case Sensor.TYPE_MAGNETIC_FIELD:
-                mGeomagnetic = applyLowPassFilter(mGeomagnetic, event.values);
-                break;
-            default:
-                Log.w(TAG, "Unknown sensor type " + sensorType);
-                return;
-        }
-        if (mGravity == null) {
-            Log.w(TAG, "mGravity is null");
-            return;
-        }
-        if (mGeomagnetic == null) {
-            Log.w(TAG, "mGeomagnetic is null");
-            return;
-        }
-        float[] r = new float[9];
-        if (!SensorManager.getRotationMatrix(r, null, mGravity, mGeomagnetic)) {
-            Log.w(TAG, "getRotationMatrix() failed");
+        if (event.sensor.getType() != Sensor.TYPE_ACCELEROMETER) {
             return;
         }
 
-        float[] orientation = new float[9];
-        SensorManager.getOrientation(r, orientation);
-        // Orientation contains: azimuth, pitch and roll - we'll use pitch
-        float roll = orientation[1];
-        int rollDeg = (int) Math.round(Math.toDegrees(roll));
+        mGravity = applyLowPassFilter(mGravity, event.values);
+
+        // Calculate tilt using accelerometer only (no magnetometer needed)
+        // Phone is on its side (X dominant), Y changes when seesaw tilts
+        double tilt = Math.atan2(-mGravity[1], Math.abs(mGravity[0]));
+        int tiltDeg = (int) Math.round(Math.toDegrees(tilt));
 
         // Only notify listener if tilt exceeds the sensitivity threshold
-        if (Math.abs(rollDeg) >= sensitivityThreshold) {
-            tiltListener.onTilt(rollDeg);
+        if (Math.abs(tiltDeg) >= sensitivityThreshold) {
+            tiltListener.onTilt(tiltDeg);
         } else {
-            // Send 0 when below threshold (device is flat)
+            // Send 0 when below threshold (device is level)
             tiltListener.onTilt(0);
         }
     }
@@ -144,17 +115,11 @@ public class TiltSensor implements SensorEventListener
 
     public void register()
     {
-        // call sensor manger's register listener and pass the required arguments
-        sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_GAME);
         sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
     }
 
-    // create method to unregister
-    // from sensor notifications
     public void unregister()
     {
-        // call sensor manger's unregister listener
-        // and pass the required arguments
         sensorManager.unregisterListener(this);
     }
 }
