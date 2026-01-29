@@ -132,8 +132,8 @@ public class TiltSensor implements SensorEventListener
     public void register()
     {
         // call sensor manger's register listener and pass the required arguments
-        sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_NORMAL);
-        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_GAME);
+        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
     }
 
     // create method to unregister
