@@ -18,8 +18,10 @@ class TimeFormatterTest
         return of(
             arguments(5L * 60L * 1_000L, "5:00"),
             arguments(10L * 60L * 1_000L, "10:00"),
-            arguments(10L * 1_000L, "0:10"),
-            arguments(1L * 1_000L, "0:01")
+            arguments(10L * 1_000L, "0:10"),       // exactly 10s uses normal format
+            arguments(9_999L, "9.9"),              // below 10s uses seconds.tenths
+            arguments(1L * 1_000L, "1.0"),         // 1 second
+            arguments(500L, "0.5")                 // half second
         );
     }
 
