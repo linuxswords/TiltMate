@@ -12,7 +12,7 @@ public class PlayerClock
     }
 
     private static final int WARN_COLOR = Color.RED;
-    private static final long WARN_THRESH_HOLD_IN_MILLIS = 60L * 1_000L;  // one minute
+    private static final long WARN_THRESH_HOLD_IN_MILLIS = 10_000L;  // 10 seconds
 
     private final TimeSettingsManager timeSettingsManager;
     private final PausableCountDownTimer countDownTimer;

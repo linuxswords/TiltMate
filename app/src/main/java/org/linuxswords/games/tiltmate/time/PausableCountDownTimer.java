@@ -4,9 +4,14 @@ import android.os.CountDownTimer;
 
 public abstract class PausableCountDownTimer
 {
+    private static final long LOW_TIME_THRESHOLD = 10_000L;
+    private static final long NORMAL_INTERVAL = 1_000L;
+    private static final long FAST_INTERVAL = 100L;
+
     private CountDownTimer countDownTimer;
     private long remainingTime = 0L;
     private long originalStartTime = 0L;
+    private long currentInterval = NORMAL_INTERVAL;
 
     public PausableCountDownTimer(long millisUntilFinished)
     {
@@ -23,25 +28,40 @@ public abstract class PausableCountDownTimer
     public synchronized void start()
     {
         if (isPaused) {
-            this.countDownTimer = new CountDownTimer(remainingTime, 1_000L)
-            {
-                @Override
-                public void onTick(long millisUntilFinished)
-                {
-                    remainingTime = millisUntilFinished ;
-                    onTimerTick(millisUntilFinished);
-                }
-
-                @Override
-                public void onFinish()
-                {
-                    onTimerFinish();
-                    restart();
-                }
-            };
-            this.countDownTimer.start();
+            currentInterval = remainingTime <= LOW_TIME_THRESHOLD ? FAST_INTERVAL : NORMAL_INTERVAL;
+            startTimer();
             isPaused = false;
         }
+    }
+
+    private void startTimer()
+    {
+        this.countDownTimer = new CountDownTimer(remainingTime, currentInterval)
+        {
+            @Override
+            public void onTick(long millisUntilFinished)
+            {
+                remainingTime = millisUntilFinished;
+
+                // Switch to fast interval when crossing threshold
+                if (currentInterval == NORMAL_INTERVAL && millisUntilFinished <= LOW_TIME_THRESHOLD) {
+                    countDownTimer.cancel();
+                    currentInterval = FAST_INTERVAL;
+                    startTimer();
+                    return;
+                }
+
+                onTimerTick(millisUntilFinished);
+            }
+
+            @Override
+            public void onFinish()
+            {
+                onTimerFinish();
+                restart();
+            }
+        };
+        this.countDownTimer.start();
     }
 
     public void pause()
@@ -56,6 +76,7 @@ public abstract class PausableCountDownTimer
     {
         countDownTimer.cancel();
         remainingTime = originalStartTime;
+        currentInterval = NORMAL_INTERVAL;
         isPaused = true;
     }
 
@@ -72,6 +93,7 @@ public abstract class PausableCountDownTimer
     public void setRemainingTime(long timeInMillis)
     {
         this.remainingTime = timeInMillis;
+        this.currentInterval = timeInMillis <= LOW_TIME_THRESHOLD ? FAST_INTERVAL : NORMAL_INTERVAL;
     }
 
     public boolean isPaused()
