@@ -49,9 +49,12 @@ public class TiltSensor implements SensorEventListener
     private static final String TAG = "TiltSensor";
 
     // Sensitivity thresholds in degrees
-    private static final int THRESHOLD_LOW = 20;      // Low sensitivity (0)
-    private static final int THRESHOLD_MEDIUM = 10;   // Medium sensitivity (1)
-    private static final int THRESHOLD_HIGH = 5;      // High sensitivity (2)
+    private static final int THRESHOLD_LOW = 12;      // Low sensitivity (0)
+    private static final int THRESHOLD_MEDIUM = 6;    // Medium sensitivity (1)
+    private static final int THRESHOLD_HIGH = 3;      // High sensitivity (2)
+
+    // Low-pass filter coefficient (0-1, higher = faster response)
+    private static final float ALPHA = 0.8f;
 
     private final SensorManager sensorManager;
     private final Sensor accelerometer;
@@ -85,10 +88,10 @@ public class TiltSensor implements SensorEventListener
         int sensorType = event.sensor.getType();
         switch (sensorType) {
             case Sensor.TYPE_ACCELEROMETER:
-                mGravity = event.values;
+                mGravity = applyLowPassFilter(mGravity, event.values);
                 break;
             case Sensor.TYPE_MAGNETIC_FIELD:
-                mGeomagnetic = event.values;
+                mGeomagnetic = applyLowPassFilter(mGeomagnetic, event.values);
                 break;
             default:
                 Log.w(TAG, "Unknown sensor type " + sensorType);
@@ -121,6 +124,16 @@ public class TiltSensor implements SensorEventListener
             // Send 0 when below threshold (device is flat)
             tiltListener.onTilt(0);
         }
+    }
+
+    private float[] applyLowPassFilter(float[] previous, float[] current) {
+        if (previous == null) {
+            return current.clone();
+        }
+        for (int i = 0; i < previous.length; i++) {
+            previous[i] = previous[i] + ALPHA * (current[i] - previous[i]);
+        }
+        return previous;
     }
 
     @Override
