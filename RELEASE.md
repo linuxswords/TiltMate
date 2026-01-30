@@ -49,7 +49,7 @@ Tests → Lint → Build Release APK → Create Release → Upload APK
 
 The automated release includes:
 
-- **APK Download** - `linuxswords-TiltMate-release.apk`
+- **APK Download** - `TiltMate-release.apk`
 - **Version Info** - Version number and build details
 - **Changelog** - Commits since last release
 - **Installation Instructions** - How to install on Android

@@ -22,7 +22,7 @@ Lint (checks)     ─┘
 **Artifacts** (7-day retention):
 - `test-reports` - HTML test reports
 - `lint-reports` - Lint analysis
-- `linuxswords-TiltMate-debug` - Debug APK
+- `TiltMate-debug` - Debug APK
 
 ## Usage
 
@@ -96,7 +96,7 @@ Test → Lint → Build Release APK → Create GitHub Release → Upload APK
 
 **Creates:**
 - GitHub Release page with changelog
-- APK download (`linuxswords-TiltMate-release.apk`)
+- APK download (`TiltMate-release.apk`)
 - Version tags and release notes
 
 **Usage:**

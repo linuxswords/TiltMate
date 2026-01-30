@@ -126,7 +126,7 @@ jobs:
 
             ### 🎮 Features
             - Tilt-based clock control
-            - Multiple time settings (3+0 through 15+5)
+            - Multiple time settings (3+0, 3+2, 5+0, 5+3, 10+0, 10+5, 15+10, plus custom)
             - Fischer increment support
             - Gesture controls (tap to pause, double-tap to reset)
 

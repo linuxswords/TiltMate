@@ -25,7 +25,7 @@ Download the APK and install on your Android device (Android 5.0+).
   - Single tap to pause
   - Double tap to reset
   - Long press to access settings
-- **Multiple time controls**: 3+0, 3+5, 5+0, 5+5, 10+0, 10+5, 15+0, 15+5
+- **Multiple time controls**: 3+0, 3+2, 5+0, 5+3, 10+0, 10+5, 15+10, plus custom
 - **Increment support**: Fischer chess clock with increment per move
 - **Persistent settings**: Your time control preference is saved automatically
 - **Advanced settings**:
