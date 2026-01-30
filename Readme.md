@@ -61,6 +61,39 @@ make help                   # All commands
 - [RELEASE.md](RELEASE.md) - Release instructions
 - [AAB-BUILD.md](AAB-BUILD.md) - Android App Bundle build guide
 
+## DIY Tilt Base
+
+Build your own seesaw-style base to use with TiltMate. The phone sits in landscape orientation and tilts like a seesaw to switch clocks.
+
+### Requirements
+
+- **Pivot point**: Center pivot allowing the phone to rock back and forth
+- **Phone holder**: Secure the phone in landscape orientation (on its side)
+- **Tilt angle**: Must allow tilting beyond the sensitivity threshold:
+
+| Sensitivity      | Minimum Tilt Angle |
+| ---------------- | ------------------ |
+| High             | 3°                 |
+| Medium (default) | 6°                 |
+| Low              | 12°                |
+
+### Dimensions
+
+- **Width**: At least your phone's length + 2cm margin (typical: 20-24cm). Tipp: leave enough space bo be able to hit the base with a captured chess piece
+- **Depth**: At least your phone's width + 1cm margin (typical: 8-10cm)
+- **Pivot height**: 1-2cm recommended for smooth rocking motion
+
+### Design Tips
+
+1. **Balance**: The pivot should be centered so the base rocks evenly
+2. **Stability**: Add small feet or rubber pads to prevent sliding
+3. **Stop angle**: Limit tilt to ~15-20° to prevent the phone from sliding off
+4. **Material**: Wood, 3D printed plastic, or even cardboard works
+
+### 3D Printable Base
+
+STL files for a 3D printable base will be added to this repository (see todos).
+
 ## ideas
 
 - [ ] analog clock?
