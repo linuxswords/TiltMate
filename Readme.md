@@ -12,6 +12,8 @@ Put your phone onto something that can be tilted and instead of pressing a butto
 
 There are 3D prints available for the base and those will be part of the project in the future.
 
+<img src="./assets/doc/hero-image.webp" alt="TiltMate hero-image" width="400"/>
+
 ## Download
 
 📥 **[Download Latest Release](https://github.com/linuxswords/TiltMate/releases/latest)**
