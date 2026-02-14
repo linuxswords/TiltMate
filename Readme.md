@@ -67,6 +67,8 @@ make help                   # All commands
 
 Build your own seesaw-style base to use with TiltMate. The phone sits in landscape orientation and tilts like a seesaw to switch clocks.
 
+<img src="./assets/doc/base_example_image.webp" alt="Example seesaw bases: wooden and 3D printed" width="400"/>
+
 ### Requirements
 
 - **Pivot point**: Center pivot allowing the phone to rock back and forth
