@@ -28,6 +28,7 @@ public class AdvancedSettingsActivity extends Activity
         setupTickingSwitch();
         setupSensitivityButtons();
         setupShowMovesSwitch();
+        setupShowHintsSwitch();
 
         // Back button returns to settings screen
         findViewById(R.id.advancedSettingsBackButton).setOnClickListener(v ->
@@ -62,6 +63,21 @@ public class AdvancedSettingsActivity extends Activity
         showMovesSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             preferences.setShowMovesEnabled(isChecked);
             updateSwitchStyle(showMovesSwitch, isChecked);
+        });
+    }
+
+    private void setupShowHintsSwitch()
+    {
+        SwitchMaterial showHintsSwitch = findViewById(R.id.showHintsSwitch);
+
+        // Load saved setting
+        showHintsSwitch.setChecked(preferences.isShowHintsEnabled());
+        updateSwitchStyle(showHintsSwitch, preferences.isShowHintsEnabled());
+
+        // Save when changed
+        showHintsSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            preferences.setShowHintsEnabled(isChecked);
+            updateSwitchStyle(showHintsSwitch, isChecked);
         });
     }
 

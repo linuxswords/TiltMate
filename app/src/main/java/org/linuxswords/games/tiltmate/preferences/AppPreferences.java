@@ -13,6 +13,7 @@ public class AppPreferences
     private static final String KEY_TICKING_ENABLED = "ticking_enabled";
     private static final String KEY_TILT_SENSITIVITY = "tilt_sensitivity";
     private static final String KEY_SHOW_MOVES = "show_moves_enabled";
+    private static final String KEY_SHOW_HINTS = "show_hints_enabled";
 
     private final SharedPreferences prefs;
 
@@ -139,5 +140,15 @@ public class AppPreferences
     public boolean isShowMovesEnabled()
     {
         return prefs.getBoolean(KEY_SHOW_MOVES, false);
+    }
+
+    public void setShowHintsEnabled(boolean enabled)
+    {
+        prefs.edit().putBoolean(KEY_SHOW_HINTS, enabled).apply();
+    }
+
+    public boolean isShowHintsEnabled()
+    {
+        return prefs.getBoolean(KEY_SHOW_HINTS, true);
     }
 }

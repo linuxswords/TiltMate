@@ -74,6 +74,7 @@ public class MainActivity extends Activity implements TiltListener, PlayerClock.
 
         // Initialize tap to start indicator
         tapToStartIndicator = findViewById(R.id.tapToStartIndicator);
+        updateHintVisibility();
 
         // Restore saved state if available
         if (savedInstanceState != null) {
@@ -111,8 +112,7 @@ public class MainActivity extends Activity implements TiltListener, PlayerClock.
                     }
                     tickingSound.start();
                     gameStarted = true;
-                    tapToStartIndicator.setText("Tap to pause");
-                    tapToStartIndicator.setVisibility(View.VISIBLE);
+                    showHint("Tap to pause");
                 } else if (gameStarted) {
                     // Check if clocks are paused (both not running)
                     if (!leftClock.isRunning() && !rightClock.isRunning()) {
@@ -124,14 +124,12 @@ public class MainActivity extends Activity implements TiltListener, PlayerClock.
                                 rightClock.start();
                             }
                             tickingSound.start();
-                            tapToStartIndicator.setText("Tap to pause");
-                            tapToStartIndicator.setVisibility(View.VISIBLE);
+                            showHint("Tap to pause");
                         }
                     } else {
                         // A clock is running, so pause
                         pauseAllClocks();
-                        tapToStartIndicator.setText("Tap to continue · Long press for settings · Double tap to reset");
-                        tapToStartIndicator.setVisibility(View.VISIBLE);
+                        showHint("Tap to continue · Long press for settings · Double tap to reset");
                     }
                 }
             }
@@ -190,8 +188,7 @@ public class MainActivity extends Activity implements TiltListener, PlayerClock.
         // Reset game started state and show indicator
         gameStarted = false;
         gameFinished = false;
-        tapToStartIndicator.setText("Tap to start · Long press for settings");
-        tapToStartIndicator.setVisibility(View.VISIBLE);
+        showHint("Tap to start · Long press for settings");
 
         Log.d(TAG, "Clocks restarted to current time setting: " + current.getLabel());
     }
@@ -210,6 +207,9 @@ public class MainActivity extends Activity implements TiltListener, PlayerClock.
 
         // Update move counter visibility in case it was changed in settings
         updateMoveCounterVisibility();
+
+        // Update hint visibility in case it was changed in settings
+        updateHintVisibility();
 
         // Update time display label in case time setting was changed
         TimeSettings current = TimeSettingsManager.instance(this).getCurrent();
@@ -297,7 +297,11 @@ public class MainActivity extends Activity implements TiltListener, PlayerClock.
 
         // Restore game started state and indicator
         gameStarted = savedGameStarted;
-        tapToStartIndicator.setVisibility(gameStarted ? View.GONE : View.VISIBLE);
+        if (!gameStarted) {
+            showHint("Tap to start · Long press for settings");
+        } else {
+            tapToStartIndicator.setVisibility(View.GONE);
+        }
 
         // Restore running state
         if ("LEFT".equals(runningClock)) {
@@ -359,5 +363,22 @@ public class MainActivity extends Activity implements TiltListener, PlayerClock.
     private void updateMoveCountDisplay()
     {
         moveCountDisplay.setText(moveCount + " moves");
+    }
+
+    private void updateHintVisibility()
+    {
+        if (!preferences.isShowHintsEnabled()) {
+            tapToStartIndicator.setVisibility(View.GONE);
+        }
+    }
+
+    private void showHint(String text)
+    {
+        if (preferences.isShowHintsEnabled()) {
+            tapToStartIndicator.setText(text);
+            tapToStartIndicator.setVisibility(View.VISIBLE);
+        } else {
+            tapToStartIndicator.setVisibility(View.GONE);
+        }
     }
 }
