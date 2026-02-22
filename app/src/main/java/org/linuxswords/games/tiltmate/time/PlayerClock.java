@@ -92,6 +92,11 @@ public class PlayerClock
         return this;
     }
 
+    public void setActiveDisplay(boolean active)
+    {
+        this.view.setAlpha(active ? 1.0F : 0.5F);
+    }
+
     public boolean isRunning()
     {
         return !this.countDownTimer.isPaused();

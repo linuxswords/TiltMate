@@ -2,6 +2,7 @@ package org.linuxswords.games.tiltmate;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -389,13 +390,21 @@ public class MainActivity extends Activity implements TiltListener, PlayerClock.
     private void updateColorIndicators(int degree)
     {
         if (degree < 0) {
-            // Left is up (white side)
+            // Left is up: left is black, right is white
             colorIndicatorLeft.setText("♟");
+            colorIndicatorLeft.setTextColor(Color.WHITE);
             colorIndicatorRight.setText("♙");
+            colorIndicatorRight.setTextColor(Color.parseColor("#888888"));
+            leftClock.setActiveDisplay(true);
+            rightClock.setActiveDisplay(false);
         } else if (degree > 0) {
-            // Right is up (white side)
+            // Right is up: right is black, left is white
             colorIndicatorRight.setText("♟");
+            colorIndicatorRight.setTextColor(Color.WHITE);
             colorIndicatorLeft.setText("♙");
+            colorIndicatorLeft.setTextColor(Color.parseColor("#888888"));
+            rightClock.setActiveDisplay(true);
+            leftClock.setActiveDisplay(false);
         }
     }
 
