@@ -70,7 +70,7 @@
     android:id="@+id/tapToStartIndicator"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="Tap to start"
+    android:text="Tap to start · Long press for settings"
     android:textColor="#AAAAAA"
     android:textSize="24sp"
     android:textStyle="italic"
