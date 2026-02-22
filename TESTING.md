@@ -4,7 +4,7 @@
 
 ```bash
 # Setup (first time)
-./setup-dev-env.sh
+mise install
 
 # Run tests
 make test
@@ -44,14 +44,8 @@ Reports are generated in `app/build/reports/tests/testDebugUnitTest/index.html`
 
 ## Prerequisites
 
-- **JDK 21+** - Required
+- **[mise](https://mise.jdx.dev)** - Manages JDK 21 and Gradle automatically (`mise install`)
 - **Android SDK** - Optional for unit tests, required for APK build
-
-Setup:
-```bash
-export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
-export ANDROID_HOME=$HOME/Android/Sdk
-```
 
 ## Writing Tests
 
@@ -83,8 +77,7 @@ void testWithParameters(String input, String expected) {
 
 **"JAVA_HOME is not set"**
 ```bash
-sudo apt-get install openjdk-17-jdk
-export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+mise install   # Installs Java and sets JAVA_HOME automatically
 ```
 
 **"No connected devices"** (for instrumented tests)

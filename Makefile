@@ -1,10 +1,9 @@
 # TiltMate - Makefile
 #
 # Prerequisites:
-#   - Java Development Kit (JDK) 21 or higher
+#   - mise (https://mise.jdx.dev) - run `mise install` to set up JDK 21 and Gradle
 #   - Android SDK (can be installed via Android Studio or sdkmanager)
 #   - ANDROID_HOME environment variable set to Android SDK location
-#   - JAVA_HOME environment variable set to JDK location
 #
 # Quick Start:
 #   make help          - Show all available commands
@@ -37,7 +36,7 @@ help: ## Display this help message
 		/^##@/ { printf "\n\033[0;33m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 	@echo ""
 	@echo -e "$(YELLOW)Prerequisites:$(NC)"
-	@echo "  - JDK 21+ (set JAVA_HOME)"
+	@echo "  - mise (https://mise.jdx.dev) - run 'mise install'"
 	@echo "  - Android SDK (set ANDROID_HOME)"
 	@echo "  Run 'make check-env' to verify setup"
 
@@ -45,7 +44,7 @@ check-env: ## Check if required environment variables are set
 	@echo -e "$(CYAN)Checking environment setup...$(NC)"
 	@if [ -z "$$JAVA_HOME" ]; then \
 		echo -e "$(RED)✗ JAVA_HOME is not set$(NC)"; \
-		echo "  Install JDK 21+ and set JAVA_HOME"; \
+		echo "  Run 'mise install' to set up Java"; \
 		exit 1; \
 	else \
 		echo -e "$(GREEN)✓ JAVA_HOME is set: $$JAVA_HOME$(NC)"; \

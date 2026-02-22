@@ -37,11 +37,11 @@ Download the APK and install on your Android device (Android 5.0+).
 
 ## Development
 
-**Prerequisites:** JDK 21+, Android SDK (API 21+)
+**Prerequisites:** [mise](https://mise.jdx.dev), Android SDK (API 21+)
 
 ```bash
 # Setup
-./setup-dev-env.sh          # Automated setup (Linux)
+mise install                # Installs Java 21 + Gradle 9.2.0
 make check-env              # Verify environment
 
 # Build
