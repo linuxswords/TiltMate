@@ -32,6 +32,8 @@ public class MainActivity extends Activity implements TiltListener, PlayerClock.
     private TickingSoundManager tickingSound;
     private TextView moveCountDisplay;
     private TextView tapToStartIndicator;
+    private TextView colorIndicatorLeft;
+    private TextView colorIndicatorRight;
 
     // Track which clock was running before pausing (for settings navigation)
     private enum ClockState { NONE, LEFT, RIGHT }
@@ -71,6 +73,10 @@ public class MainActivity extends Activity implements TiltListener, PlayerClock.
         // Initialize move counter display (must be before restoreClockState)
         moveCountDisplay = findViewById(R.id.moveCountDisplay);
         updateMoveCounterVisibility();
+
+        // Initialize color indicators
+        colorIndicatorLeft = findViewById(R.id.colorIndicatorLeft);
+        colorIndicatorRight = findViewById(R.id.colorIndicatorRight);
 
         // Initialize tap to start indicator
         tapToStartIndicator = findViewById(R.id.tapToStartIndicator);
@@ -189,6 +195,8 @@ public class MainActivity extends Activity implements TiltListener, PlayerClock.
         gameStarted = false;
         gameFinished = false;
         showHint("Tap to start · Long press for settings");
+        // Unlock color indicators so they follow tilt again
+        updateColorIndicators(currentTiltDegree);
 
         Log.d(TAG, "Clocks restarted to current time setting: " + current.getLabel());
     }
@@ -323,9 +331,15 @@ public class MainActivity extends Activity implements TiltListener, PlayerClock.
         if (degree != 0) {
             if (currentTiltDegree == 0) {
                 currentTiltDegree = degree;
+                if (!gameStarted) {
+                    updateColorIndicators(degree);
+                }
             }
             else if (Math.signum(currentTiltDegree) != Math.signum(degree)) {
                 currentTiltDegree = degree;
+                if (!gameStarted) {
+                    updateColorIndicators(degree);
+                }
                 // Only switch clocks if game has been started with a tap
                 if (gameStarted) {
                     Log.d(TAG, "tilted from " + currentTiltDegree + " to " + degree);
@@ -369,6 +383,19 @@ public class MainActivity extends Activity implements TiltListener, PlayerClock.
     {
         if (!preferences.isShowHintsEnabled()) {
             tapToStartIndicator.setVisibility(View.GONE);
+        }
+    }
+
+    private void updateColorIndicators(int degree)
+    {
+        if (degree < 0) {
+            // Left is up (white side)
+            colorIndicatorLeft.setText("♟");
+            colorIndicatorRight.setText("♙");
+        } else if (degree > 0) {
+            // Right is up (white side)
+            colorIndicatorRight.setText("♟");
+            colorIndicatorLeft.setText("♙");
         }
     }
 
