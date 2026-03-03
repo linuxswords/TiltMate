@@ -10,7 +10,7 @@ A chess clock! It started as a weekend project, trying to build a chess clock ap
 
 Put your phone onto something that can be tilted and instead of pressing a button you tilt your phone, like a seesaw!
 
-There are 3D prints available for the base and those will be part of the project in the future.
+There are 3D prints available for the base: [base-models](./base-models/)
 
 <img src="./assets/doc/hero-image.webp" alt="TiltMate hero-image" width="400"/>
 
