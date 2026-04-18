@@ -424,22 +424,3 @@ html, body {
   }
 }
 
-@media (orientation: portrait) {
-  .game-screen {
-    flex-direction: column;
-  }
-
-  .clock-side {
-    flex: 1;
-  }
-
-
-  .center-strip {
-    flex-direction: row;
-    gap: 1rem;
-  }
-
-  .hint {
-    margin-top: 0;
-  }
-}

@@ -118,6 +118,9 @@ if (tiltSensor.isAvailable()) {
   });
 }
 
+// --- Lock landscape orientation ---
+screen.orientation?.lock?.('landscape').catch(() => {});
+
 // --- Wake lock ---
 let wakeLock: WakeLockSentinel | null = null;
 

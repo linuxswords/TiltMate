@@ -4,7 +4,7 @@
   "description": "Tilt-based chess clock",
   "start_url": "/",
   "display": "fullscreen",
-  "orientation": "any",
+  "orientation": "landscape",
   "background_color": "#403e3e",
   "theme_color": "#403e3e",
   "icons": [
