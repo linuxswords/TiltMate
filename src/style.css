@@ -433,9 +433,6 @@ html, body {
     flex: 1;
   }
 
-  .left-side {
-    transform: rotate(180deg);
-  }
 
   .center-strip {
     flex-direction: row;
