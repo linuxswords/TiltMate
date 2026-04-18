@@ -58,7 +58,12 @@ check: ## Type check
 
 ##@ CI/CD
 
-ci: check build ## Full CI pipeline: type check + build
+test: ## Run tests
+	@echo -e "$(CYAN)Running tests...$(NC)"
+	npx vitest run
+	@echo -e "$(GREEN)Tests passed!$(NC)"
+
+ci: check test build ## Full CI pipeline: type check + test + build
 	@echo -e "$(GREEN)CI pipeline passed!$(NC)"
 
 ##@ Maintenance
