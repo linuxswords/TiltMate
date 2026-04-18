@@ -1,8 +1,7 @@
 # TiltMate
 
-[![Android CI](https://github.com/linuxswords/TiltMate/actions/workflows/android-ci.yml/badge.svg)](https://github.com/linuxswords/TiltMate/actions/workflows/android-ci.yml)
+[![CI](https://github.com/linuxswords/TiltMate/actions/workflows/ci.yml/badge.svg)](https://github.com/linuxswords/TiltMate/actions/workflows/ci.yml)
 [![Release](https://img.shields.io/github/v/release/linuxswords/TiltMate)](https://github.com/linuxswords/TiltMate/releases/latest)
-[![Downloads](https://img.shields.io/github/downloads/linuxswords/TiltMate/total)](https://github.com/linuxswords/TiltMate/releases)
 
 <img src="./assets/images/tiltmate-icon.png" alt="TiltMate icon" width="200"/>
 
@@ -14,54 +13,49 @@ There are 3D prints available for the base: [base-models](./base-models/)
 
 <img src="./assets/doc/hero-image.webp" alt="TiltMate hero-image" width="400"/>
 
-## Download
+## Use it
 
-📥 **[Download Latest Release](https://github.com/linuxswords/TiltMate/releases/latest)**
-
-Download the APK and install on your Android device (Android 5.0+).
+Open the web app in your browser. On mobile, use "Add to Home Screen" to install it as a PWA — it works offline and feels like a native app.
 
 ## Features
 
-- **Tilt-based control**: Switch between clocks by tilting your phone
+- **Tilt-based control**: Switch between clocks by tilting your phone (accelerometer)
+- **Keyboard controls**: Arrow keys to tilt, spacebar to tap, R to reset (desktop)
 - **Gesture controls**:
-  - Single tap to pause
+  - Single tap to start/pause
   - Double tap to reset
   - Long press to access settings
 - **Multiple time controls**: 3+0, 3+2, 5+0, 5+3, 10+0, 10+5, 15+10, plus custom
 - **Increment support**: Fischer chess clock with increment per move
-- **Persistent settings**: Your time control preference is saved automatically
+- **Persistent settings**: Your preferences are saved in localStorage
 - **Advanced settings**:
   - Clock ticking sound (optional, disabled by default)
   - Adjustable tilt sensitivity (Low/Medium/High)
+  - Move counter
+  - Hint toggle
+- **PWA**: Installable, offline-capable, fullscreen
+- **Portrait support**: Both players can read their clock in portrait mode
 - **Clean UI**: Fullscreen, no buttons on main clock screen
 
 ## Development
 
-**Prerequisites:** [mise](https://mise.jdx.dev), Android SDK (API 21+)
+**Prerequisites:** [mise](https://mise.jdx.dev) or Node.js 22+
 
 ```bash
 # Setup
-mise install                # Installs Java 21 + Gradle 9.2.0
-make check-env              # Verify environment
+mise install                # Installs Node.js 22
+npm install                 # Install dependencies
 
 # Build
-make build                  # Debug APK
-make build-release          # Release APK
-make install                # Build + install to device
+npm run dev                 # Dev server with HMR
+npm run build               # Production build (dist/)
+npx tsc --noEmit            # Type check
 
-# Test
-make test                   # Unit tests
-make ci                     # Full CI (test + lint + build)
-
-# Help
+# Or use make
+make dev                    # Dev server
+make ci                     # Full CI (check + build)
 make help                   # All commands
 ```
-
-**Documentation:**
-
-- [TESTING.md](TESTING.md) - Testing guide
-- [RELEASE.md](RELEASE.md) - Release instructions
-- [AAB-BUILD.md](AAB-BUILD.md) - Android App Bundle build guide
 
 ## DIY Tilt Base
 
@@ -83,41 +77,13 @@ Build your own seesaw-style base to use with TiltMate. The phone sits in landsca
 
 ### Dimensions
 
-- **Width**: At least your phone's length + 2cm margin (typical: 20-24cm). Tipp: leave enough space bo be able to hit the base with a captured chess piece
+- **Width**: At least your phone's length + 2cm margin (typical: 20-24cm). Tip: leave enough space to be able to hit the base with a captured chess piece
 - **Depth**: At least your phone's width + 1cm margin (typical: 8-10cm)
 - **Pivot height**: 1-2cm recommended for smooth rocking motion
 
-### Design Tips
-
-1. **Balance**: The pivot should be centered so the base rocks evenly
-2. **Stability**: Add small feet or rubber pads to prevent sliding
-3. **Stop angle**: Limit tilt to ~15-20° to prevent the phone from sliding off
-4. **Material**: Wood, 3D printed plastic, or even cardboard works
-
 ### 3D Printable Base
 
-STL files for a 3D printable base will be added to this repository (see todos).
-
-## ideas
-
-- [ ] analog clock?
-- [ ] simple tap could activate meta info like current time setting/info etc? But I like the single tap pause function
-
-## todos
-
-- [ ] Add example STL file for a base
-- [x] better picture
-- [x] store your last time setting
-- [x] settings: add sound effects
-- [x] show number of moves made
-- [x] show current time setting on front screen
-- [x] double tab to reset clock
-- [x] avoid flickering/to-quick-switches by lowering sensibility
-- [x] implement increment
-- [x] fix increment bug at start
-- [x] Clock-UI without buttons
-- [x] use alpha instead of background change when tilting
-- [x] ~~settings: configure tilting threshold~~ figured out a better way to measure tilts
+STL and STEP files are available in [base-models/](./base-models/).
 
 ## Credits
 

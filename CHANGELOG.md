@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-04-18
+
+### Changed
+- **Platform Migration** - Migrated from Android app to web app (PWA)
+  - Full rewrite in TypeScript with Vite build tooling
+  - Works on any device with a browser (iOS, Android, desktop)
+  - Installable as PWA with offline support
+  - No app store required — just open the URL
+- **Desktop Support** - Added keyboard controls for desktop use
+  - Arrow keys to simulate tilt (left/right)
+  - Spacebar to tap (start/pause)
+  - R to reset clocks
+- **Portrait Mode** - Left clock rotates 180° so both players can read their side
+- **Wake Lock** - Uses Wake Lock API to keep screen on during gameplay
+- **Fullscreen** - Automatically enters fullscreen on game start
+
+### Removed
+- Android-specific code (replaced by web platform APIs)
+- Gradle build system (replaced by Vite + npm)
+- Java source code (replaced by TypeScript)
+
 ## [1.11.0] - 2026-01-24
 
 ### Added
@@ -188,7 +209,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Material Design UI with ConstraintLayout
 - Keep screen on during gameplay
 
-[Unreleased]: https://github.com/linuxswords/TiltMate/compare/v1.11.0...HEAD
+[Unreleased]: https://github.com/linuxswords/TiltMate/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/linuxswords/TiltMate/compare/v1.11.0...v2.0.0
 [1.11.0]: https://github.com/linuxswords/TiltMate/compare/v1.10.0...v1.11.0
 [1.10.0]: https://github.com/linuxswords/TiltMate/compare/v1.9.1...v1.10.0
 [1.9.1]: https://github.com/linuxswords/TiltMate/compare/v1.9.0...v1.9.1
