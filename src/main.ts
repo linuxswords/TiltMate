@@ -111,8 +111,8 @@ tickingSound.setEnabled(prefs.isTickingEnabled());
 const tiltSensor = new TiltSensor();
 tiltSensor.setSensitivity(prefs.getTiltSensitivity());
 tiltSensor.setCallback(onTilt);
-tiltSensor.setPostureCallback((posture) => {
-  applyMode(posture === 'flat');
+tiltSensor.setPostureCallback((posture, gravityX) => {
+  applyMode(posture === 'flat', gravityX);
 });
 
 if (tiltSensor.isAvailable()) {
