@@ -14,12 +14,13 @@ let moveCount = 0;
 let gameStarted = false;
 let gameFinished = false;
 let settingsOpen = false;
+let isTableMode = window.matchMedia('(orientation: portrait)').matches;
 
 // --- DOM ---
 const app = document.getElementById('app')!;
 app.innerHTML = `
   <div id="game" class="game-screen">
-    <div class="clock-side left-side">
+    <div class="clock-side left-side" id="leftSide">
       <div class="color-indicator" id="colorLeft"></div>
       <div class="clock-display" id="clockLeft"></div>
     </div>
@@ -28,7 +29,7 @@ app.innerHTML = `
       <div class="move-count" id="moveCount"></div>
       <div class="hint" id="hint"></div>
     </div>
-    <div class="clock-side right-side">
+    <div class="clock-side right-side" id="rightSide">
       <div class="color-indicator" id="colorRight"></div>
       <div class="clock-display" id="clockRight"></div>
     </div>
@@ -43,6 +44,30 @@ const hintEl = document.getElementById('hint')!;
 const colorLeftEl = document.getElementById('colorLeft')!;
 const colorRightEl = document.getElementById('colorRight')!;
 const gameEl = document.getElementById('game')!;
+const leftSideEl = document.getElementById('leftSide')!;
+const rightSideEl = document.getElementById('rightSide')!;
+
+// --- Mode detection ---
+function applyMode(table: boolean, gravityX = 0) {
+  isTableMode = table;
+  gameEl.classList.toggle('flat-mode', table);
+
+  // When in seesaw mode but viewport is portrait-locked, rotate content to match
+  const viewportIsPortrait = window.innerHeight > window.innerWidth;
+  const needsRotation = !table && viewportIsPortrait;
+  gameEl.classList.toggle('seesaw-rotated', needsRotation);
+  gameEl.classList.toggle('seesaw-rotated-cw', needsRotation && gravityX >= 0);
+  gameEl.classList.toggle('seesaw-rotated-ccw', needsRotation && gravityX < 0);
+
+  updateHints();
+}
+
+applyMode(isTableMode);
+
+// Fallback: use media query when sensor is not available
+window.matchMedia('(orientation: portrait)').addEventListener('change', (e) => {
+  if (!tiltSensor.isAvailable()) applyMode(e.matches);
+});
 
 // --- Initialize clocks ---
 function createClocks() {
@@ -64,7 +89,6 @@ function createClocks() {
   left.onFinished = () => onClockFinished();
   right.onFinished = () => onClockFinished();
 
-  // Show initial time
   const initialText = left.getDisplayText();
   clockLeftEl.textContent = initialText;
   clockRightEl.textContent = initialText;
@@ -87,6 +111,15 @@ tickingSound.setEnabled(prefs.isTickingEnabled());
 const tiltSensor = new TiltSensor();
 tiltSensor.setSensitivity(prefs.getTiltSensitivity());
 tiltSensor.setCallback(onTilt);
+tiltSensor.setPostureCallback((posture) => {
+  applyMode(posture === 'flat');
+});
+
+if (tiltSensor.isAvailable()) {
+  tiltSensor.requestPermission().then((granted) => {
+    if (granted) tiltSensor.start();
+  });
+}
 
 // --- Keyboard fallback ---
 const keyboard = new KeyboardFallback();
@@ -111,23 +144,6 @@ keyboard.setCallback((action) => {
 });
 keyboard.start();
 
-// Start tilt sensor
-if (tiltSensor.isAvailable()) {
-  tiltSensor.requestPermission().then((granted) => {
-    if (granted) tiltSensor.start();
-  });
-}
-
-// --- Posture detection ---
-tiltSensor.setPostureCallback((posture) => {
-  gameEl.classList.toggle('flat-mode', posture === 'flat');
-  if (posture === 'upright') {
-    screen.orientation?.lock?.('landscape').catch(() => {});
-  } else {
-    screen.orientation?.unlock?.();
-  }
-});
-
 // --- Wake lock ---
 let wakeLock: WakeLockSentinel | null = null;
 
@@ -136,7 +152,7 @@ async function requestWakeLock() {
     try {
       wakeLock = await navigator.wakeLock.request('screen');
     } catch {
-      // Wake lock request failed (e.g. low battery)
+      // Wake lock request failed
     }
   }
 }
@@ -153,8 +169,12 @@ function requestFullscreen() {
   document.documentElement.requestFullscreen?.().catch(() => {});
 }
 
-// --- Game logic ---
+// =====================
+// Seesaw mode (landscape)
+// =====================
+
 function onTilt(degree: number) {
+  if (isTableMode) return;
   if (gameFinished || settingsOpen) return;
 
   if (degree !== 0) {
@@ -177,18 +197,9 @@ function onTilt(degree: number) {
   }
 }
 
-function toggleSwitch(toActivate: PlayerClock, toPause: PlayerClock) {
-  toPause.addIncrement();
-  toPause.pause();
-  toActivate.start();
-  tickingSound.start();
-  moveCount++;
-  updateMoveDisplay();
-  updateClockOpacity();
-}
-
 function onSingleClick() {
   if (gameFinished || settingsOpen) return;
+  if (isTableMode) return;
 
   if (!gameStarted && currentTiltDegree !== 0) {
     if (currentTiltDegree < 0) {
@@ -204,7 +215,6 @@ function onSingleClick() {
     updateClockOpacity();
   } else if (gameStarted) {
     if (!clocks.left.isRunning() && !clocks.right.isRunning()) {
-      // Resume
       if (currentTiltDegree !== 0) {
         if (currentTiltDegree < 0) {
           clocks.left.start();
@@ -216,7 +226,6 @@ function onSingleClick() {
         updateClockOpacity();
       }
     } else {
-      // Pause
       clocks.left.pause();
       clocks.right.pause();
       tickingSound.stop();
@@ -224,6 +233,84 @@ function onSingleClick() {
       updateClockOpacity();
     }
   }
+}
+
+// =====================
+// Table mode (portrait)
+// =====================
+
+function onSideTap(side: 'left' | 'right') {
+  if (!isTableMode) return;
+  if (gameFinished || settingsOpen) return;
+
+  const tappedClock = side === 'left' ? clocks.left : clocks.right;
+  const otherClock = side === 'left' ? clocks.right : clocks.left;
+
+  if (!gameStarted) {
+    tappedClock.start();
+    tickingSound.start();
+    gameStarted = true;
+    requestWakeLock();
+    requestFullscreen();
+    showHint('Tap your side to switch');
+    updateClockOpacity();
+    return;
+  }
+
+  if (tappedClock.isRunning()) {
+    toggleSwitch(otherClock, tappedClock);
+    return;
+  }
+
+  if (!clocks.left.isRunning() && !clocks.right.isRunning()) {
+    tappedClock.start();
+    tickingSound.start();
+    showHint('Tap your side to switch');
+    updateClockOpacity();
+  }
+}
+
+function setupSideTap(el: HTMLElement, side: 'left' | 'right') {
+  let longPressTimer = 0;
+  let didLongPress = false;
+
+  el.addEventListener('pointerdown', (e) => {
+    if (!isTableMode) return;
+    e.stopPropagation();
+    didLongPress = false;
+    longPressTimer = window.setTimeout(() => {
+      didLongPress = true;
+      openSettings();
+    }, 600);
+  });
+
+  el.addEventListener('pointerup', (e) => {
+    if (!isTableMode) return;
+    e.stopPropagation();
+    clearTimeout(longPressTimer);
+    if (!didLongPress) onSideTap(side);
+  });
+
+  el.addEventListener('pointercancel', () => {
+    clearTimeout(longPressTimer);
+  });
+}
+
+setupSideTap(leftSideEl, 'left');
+setupSideTap(rightSideEl, 'right');
+
+// =====================
+// Shared
+// =====================
+
+function toggleSwitch(toActivate: PlayerClock, toPause: PlayerClock) {
+  toPause.addIncrement();
+  toPause.pause();
+  toActivate.start();
+  tickingSound.start();
+  moveCount++;
+  updateMoveDisplay();
+  updateClockOpacity();
 }
 
 function restartAllClocks() {
@@ -238,7 +325,7 @@ function restartAllClocks() {
   updateMoveDisplay();
   updateClockOpacity();
   updateColorIndicators(currentTiltDegree);
-  showHint('Tap to start \u00b7 Long press for settings');
+  updateHints();
 }
 
 function onClockFinished() {
@@ -290,11 +377,20 @@ function showHint(text: string) {
   }
 }
 
+function updateHints() {
+  if (!gameStarted) {
+    if (isTableMode) {
+      showHint('Tap your side to start \u00b7 Long press for settings');
+    } else {
+      showHint('Tap to start \u00b7 Long press for settings');
+    }
+  }
+}
+
 function openSettings() {
   if (settingsOpen) return;
   settingsOpen = true;
 
-  // Pause clocks while in settings
   const leftWasRunning = clocks.left.isRunning();
   const rightWasRunning = clocks.right.isRunning();
   clocks.left.pause();
@@ -304,7 +400,6 @@ function openSettings() {
   new SettingsView(app, (changed) => {
     settingsOpen = false;
 
-    // Reload preferences
     tickingSound.setEnabled(prefs.isTickingEnabled());
     tiltSensor.setSensitivity(prefs.getTiltSensitivity());
     updateMoveDisplay();
@@ -313,10 +408,8 @@ function openSettings() {
     }
 
     if (changed || (!leftWasRunning && !rightWasRunning)) {
-      // Time setting changed or clocks were idle — reset
       restartAllClocks();
     } else {
-      // Resume whichever clock was running
       if (leftWasRunning) {
         clocks.left.start();
         tickingSound.start();
@@ -329,7 +422,7 @@ function openSettings() {
   });
 }
 
-// --- Gesture detection ---
+// --- Gesture detection (seesaw mode: whole screen) ---
 new GestureDetector(gameEl, {
   onSingleClick,
   onDoubleClick: restartAllClocks,
@@ -338,7 +431,7 @@ new GestureDetector(gameEl, {
 
 // --- Initial state ---
 updateMoveDisplay();
-showHint('Tap to start \u00b7 Long press for settings');
+updateHints();
 
 // Suppress unused variable warning
 void wakeLock;

@@ -2,24 +2,45 @@ const THRESHOLD_LOW = 12;
 const THRESHOLD_MEDIUM = 6;
 const THRESHOLD_HIGH = 3;
 const ALPHA = 0.8;
-const POSTURE_THRESHOLD = 45; // degrees from horizontal
 
-export type Posture = 'flat' | 'upright';
+const FLAT_Z_THRESHOLD = 6.5; // out of ~9.8; phone is flat if |z| exceeds this
+
 export type TiltCallback = (degree: number) => void;
-export type PostureCallback = (posture: Posture) => void;
+export type PostureCallback = (posture: 'flat' | 'upright', gravityX: number) => void;
+
+// Generic Sensor API types (not in all TS libs)
+interface AccelerometerReading {
+  x: number | null;
+  y: number | null;
+  z: number | null;
+}
+
+interface GenericSensor extends EventTarget {
+  start(): void;
+  stop(): void;
+  addEventListener(type: 'reading', listener: () => void): void;
+  addEventListener(type: 'error', listener: (e: { error: DOMException }) => void): void;
+}
+
+type SensorBackend = 'devicemotion' | 'accelerometer' | 'none';
 
 export class TiltSensor {
   private gravity: [number, number, number] | null = null;
   private threshold = THRESHOLD_MEDIUM;
   private callback: TiltCallback | null = null;
   private postureCallback: PostureCallback | null = null;
-  private currentPosture: Posture = 'upright';
+  private currentPosture: 'flat' | 'upright' = 'upright';
   private listening = false;
   private permissionGranted = false;
-  private available = false;
+  private backend: SensorBackend = 'none';
+  private accelerometer: (GenericSensor & AccelerometerReading) | null = null;
 
   constructor() {
-    this.available = 'DeviceMotionEvent' in window;
+    if ('DeviceMotionEvent' in window) {
+      this.backend = 'devicemotion';
+    } else if ('GravitySensor' in window || 'Accelerometer' in window) {
+      this.backend = 'accelerometer';
+    }
   }
 
   setCallback(cb: TiltCallback): void {
@@ -40,50 +61,92 @@ export class TiltSensor {
   }
 
   isAvailable(): boolean {
-    return this.available;
-  }
-
-  getPosture(): Posture {
-    return this.currentPosture;
+    return this.backend !== 'none';
   }
 
   async requestPermission(): Promise<boolean> {
-    // iOS 13+ requires explicit permission
-    const DME = DeviceMotionEvent as unknown as {
-      requestPermission?: () => Promise<string>;
-    };
-    if (typeof DME.requestPermission === 'function') {
-      try {
-        const result = await DME.requestPermission();
-        this.permissionGranted = result === 'granted';
-      } catch {
-        this.permissionGranted = false;
+    if (this.backend === 'devicemotion') {
+      const DME = DeviceMotionEvent as unknown as {
+        requestPermission?: () => Promise<string>;
+      };
+      if (typeof DME.requestPermission === 'function') {
+        try {
+          const result = await DME.requestPermission();
+          this.permissionGranted = result === 'granted';
+        } catch {
+          this.permissionGranted = false;
+        }
+      } else {
+        this.permissionGranted = true;
       }
-    } else {
-      // Android / desktop Chrome — no permission needed
-      this.permissionGranted = true;
+    } else if (this.backend === 'accelerometer') {
+      // Generic Sensor API uses Permissions API
+      try {
+        const result = await navigator.permissions.query({ name: 'accelerometer' as PermissionName });
+        this.permissionGranted = result.state !== 'denied';
+      } catch {
+        // If permissions query fails, try anyway
+        this.permissionGranted = true;
+      }
     }
     return this.permissionGranted;
   }
 
   start(): void {
-    if (this.listening || !this.available) return;
-    window.addEventListener('devicemotion', this.handleMotion);
+    if (this.listening || this.backend === 'none') return;
+
+    if (this.backend === 'devicemotion') {
+      window.addEventListener('devicemotion', this.handleMotion);
+    } else if (this.backend === 'accelerometer') {
+      this.startAccelerometer();
+    }
     this.listening = true;
   }
 
   stop(): void {
     if (!this.listening) return;
-    window.removeEventListener('devicemotion', this.handleMotion);
+
+    if (this.backend === 'devicemotion') {
+      window.removeEventListener('devicemotion', this.handleMotion);
+    } else if (this.accelerometer) {
+      this.accelerometer.stop();
+      this.accelerometer = null;
+    }
     this.listening = false;
     this.gravity = null;
   }
 
-  private handleMotion = (event: DeviceMotionEvent): void => {
-    const ag = event.accelerationIncludingGravity;
-    if (!ag || ag.x === null || ag.y === null || ag.z === null) return;
+  private startAccelerometer(): void {
+    try {
+      // Prefer GravitySensor (pre-filtered), fall back to Accelerometer
+      const w = window as unknown as Record<string, unknown>;
+      const SensorClass = w['GravitySensor'] ?? w['Accelerometer'];
 
-    const current: [number, number, number] = [ag.x, ag.y, ag.z];
+      if (!SensorClass) return;
+
+      const sensor = new (SensorClass as new (opts: { frequency: number }) => GenericSensor & AccelerometerReading)(
+        { frequency: 60 }
+      );
+
+      sensor.addEventListener('reading', () => {
+        if (sensor.x !== null && sensor.y !== null && sensor.z !== null) {
+          this.processSample(sensor.x!, sensor.y!, sensor.z!);
+        }
+      });
+
+      sensor.addEventListener('error', () => {
+        this.backend = 'none';
+      });
+
+      sensor.start();
+      this.accelerometer = sensor;
+    } catch {
+      this.backend = 'none';
+    }
+  }
+
+  private processSample(x: number, y: number, z: number): void {
+    const current: [number, number, number] = [x, y, z];
 
     if (this.gravity === null) {
       this.gravity = [...current];
@@ -93,20 +156,14 @@ export class TiltSensor {
       }
     }
 
-    // Detect posture: angle from horizontal
-    // flat = Z dominant (phone face up on table)
-    // upright = X dominant (phone standing on seesaw)
-    const absX = Math.abs(this.gravity[0]);
+    // Posture: phone is flat when Z-axis gravity dominates
     const absZ = Math.abs(this.gravity[2]);
-    const angleFromHorizontal = Math.atan2(absX, absZ) * (180 / Math.PI);
-    const newPosture: Posture = angleFromHorizontal > POSTURE_THRESHOLD ? 'upright' : 'flat';
-
+    const newPosture: 'flat' | 'upright' = absZ > FLAT_Z_THRESHOLD ? 'flat' : 'upright';
     if (newPosture !== this.currentPosture) {
       this.currentPosture = newPosture;
-      this.postureCallback?.(newPosture);
+      this.postureCallback?.(newPosture, this.gravity[0]);
     }
 
-    // Tilt calculation: atan2(-Y, |X|)
     const tilt = Math.atan2(-this.gravity[1], Math.abs(this.gravity[0]));
     const tiltDeg = Math.round((tilt * 180) / Math.PI);
 
@@ -115,5 +172,11 @@ export class TiltSensor {
     } else {
       this.callback?.(0);
     }
+  }
+
+  private handleMotion = (event: DeviceMotionEvent): void => {
+    const ag = event.accelerationIncludingGravity;
+    if (!ag || ag.x === null || ag.y === null || ag.z === null) return;
+    this.processSample(ag.x, ag.y, ag.z);
   };
 }
