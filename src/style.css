@@ -408,6 +408,24 @@ html, body {
   background: #555;
 }
 
+/* ===== Flat on table mode ===== */
+.game-screen.flat-mode {
+  flex-direction: column;
+}
+
+.game-screen.flat-mode .left-side {
+  transform: rotate(180deg);
+}
+
+.game-screen.flat-mode .center-strip {
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.game-screen.flat-mode .hint {
+  margin-top: 0;
+}
+
 /* ===== Responsive ===== */
 @media (max-width: 600px) {
   .clock-display {

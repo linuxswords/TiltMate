@@ -118,8 +118,15 @@ if (tiltSensor.isAvailable()) {
   });
 }
 
-// --- Lock landscape orientation ---
-screen.orientation?.lock?.('landscape').catch(() => {});
+// --- Posture detection ---
+tiltSensor.setPostureCallback((posture) => {
+  gameEl.classList.toggle('flat-mode', posture === 'flat');
+  if (posture === 'upright') {
+    screen.orientation?.lock?.('landscape').catch(() => {});
+  } else {
+    screen.orientation?.unlock?.();
+  }
+});
 
 // --- Wake lock ---
 let wakeLock: WakeLockSentinel | null = null;
