@@ -30,6 +30,8 @@ export class TiltSensor {
   private callback: TiltCallback | null = null;
   private postureCallback: PostureCallback | null = null;
   private currentPosture: 'flat' | 'upright' = 'upright';
+  private pendingPosture: 'flat' | 'upright' | null = null;
+  private postureTimer = 0;
   private listening = false;
   private permissionGranted = false;
   private backend: SensorBackend = 'none';
@@ -156,12 +158,22 @@ export class TiltSensor {
       }
     }
 
-    // Posture: phone is flat when Z-axis gravity dominates
+    // Posture: phone is flat when Z-axis gravity dominates (debounced)
     const absZ = Math.abs(this.gravity[2]);
-    const newPosture: 'flat' | 'upright' = absZ > FLAT_Z_THRESHOLD ? 'flat' : 'upright';
-    if (newPosture !== this.currentPosture) {
-      this.currentPosture = newPosture;
-      this.postureCallback?.(newPosture, this.gravity[0]);
+    const detected: 'flat' | 'upright' = absZ > FLAT_Z_THRESHOLD ? 'flat' : 'upright';
+    if (detected !== this.currentPosture) {
+      if (this.pendingPosture !== detected) {
+        this.pendingPosture = detected;
+        clearTimeout(this.postureTimer);
+        this.postureTimer = window.setTimeout(() => {
+          this.currentPosture = detected;
+          this.pendingPosture = null;
+          this.postureCallback?.(detected, this.gravity![0]);
+        }, 500);
+      }
+    } else {
+      this.pendingPosture = null;
+      clearTimeout(this.postureTimer);
     }
 
     const tilt = Math.atan2(-this.gravity[1], Math.abs(this.gravity[0]));
