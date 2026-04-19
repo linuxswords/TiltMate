@@ -59,6 +59,10 @@ function applyMode(table: boolean, gravityX = 0) {
   gameEl.classList.toggle('seesaw-rotated-cw', needsRotation && gravityX >= 0);
   gameEl.classList.toggle('seesaw-rotated-ccw', needsRotation && gravityX < 0);
 
+  if (table && !gameStarted) {
+    clearColorIndicators();
+  }
+
   updateHints();
 }
 
@@ -247,7 +251,9 @@ function onSideTap(side: 'left' | 'right') {
   const otherClock = side === 'left' ? clocks.right : clocks.left;
 
   if (!gameStarted) {
-    tappedClock.start();
+    // Tapper is black (presses clock), other side (white) starts running
+    setColorForSide(side, 'black');
+    otherClock.start();
     tickingSound.start();
     gameStarted = true;
     requestWakeLock();
@@ -324,7 +330,11 @@ function restartAllClocks() {
   gameFinished = false;
   updateMoveDisplay();
   updateClockOpacity();
-  updateColorIndicators(currentTiltDegree);
+  if (isTableMode) {
+    clearColorIndicators();
+  } else {
+    updateColorIndicators(currentTiltDegree);
+  }
   updateHints();
 }
 
@@ -333,19 +343,42 @@ function onClockFinished() {
   gameFinished = true;
 }
 
+function clearColorIndicators() {
+  colorLeftEl.textContent = '';
+  colorLeftEl.className = 'color-indicator';
+  colorRightEl.textContent = '';
+  colorRightEl.className = 'color-indicator';
+}
+
+function setColorForSide(side: 'left' | 'right', color: 'white' | 'black') {
+  const sideEl = side === 'left' ? colorLeftEl : colorRightEl;
+  const otherEl = side === 'left' ? colorRightEl : colorLeftEl;
+  if (color === 'black') {
+    sideEl.textContent = '\u265F';
+    sideEl.className = 'color-indicator black-piece';
+    otherEl.textContent = '\u2659';
+    otherEl.className = 'color-indicator white-piece';
+  } else {
+    sideEl.textContent = '\u2659';
+    sideEl.className = 'color-indicator white-piece';
+    otherEl.textContent = '\u265F';
+    otherEl.className = 'color-indicator black-piece';
+  }
+}
+
 function updateColorIndicators(degree: number) {
   if (degree < 0) {
-    colorLeftEl.textContent = '\u265F';
-    colorLeftEl.className = 'color-indicator black-piece';
-    colorRightEl.textContent = '\u2659';
-    colorRightEl.className = 'color-indicator white-piece';
+    colorLeftEl.textContent = '\u2659';
+    colorLeftEl.className = 'color-indicator white-piece';
+    colorRightEl.textContent = '\u265F';
+    colorRightEl.className = 'color-indicator black-piece';
     clockLeftEl.classList.remove('dimmed');
     clockRightEl.classList.add('dimmed');
   } else if (degree > 0) {
-    colorRightEl.textContent = '\u265F';
-    colorRightEl.className = 'color-indicator black-piece';
-    colorLeftEl.textContent = '\u2659';
-    colorLeftEl.className = 'color-indicator white-piece';
+    colorRightEl.textContent = '\u2659';
+    colorRightEl.className = 'color-indicator white-piece';
+    colorLeftEl.textContent = '\u265F';
+    colorLeftEl.className = 'color-indicator black-piece';
     clockRightEl.classList.remove('dimmed');
     clockLeftEl.classList.add('dimmed');
   }
