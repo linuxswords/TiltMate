@@ -263,17 +263,19 @@ function onSideTap(side: 'left' | 'right') {
     return;
   }
 
-  if (tappedClock.isRunning()) {
-    toggleSwitch(otherClock, tappedClock);
+  if (clocks.left.isRunning()) {
+    toggleSwitch(clocks.right, clocks.left);
+    return;
+  }
+  if (clocks.right.isRunning()) {
+    toggleSwitch(clocks.left, clocks.right);
     return;
   }
 
-  if (!clocks.left.isRunning() && !clocks.right.isRunning()) {
-    tappedClock.start();
-    tickingSound.start();
-    showHint('Tap your side to switch');
-    updateClockOpacity();
-  }
+  tappedClock.start();
+  tickingSound.start();
+  showHint('Tap your side to switch');
+  updateClockOpacity();
 }
 
 function setupSideTap(el: HTMLElement, side: 'left' | 'right') {
