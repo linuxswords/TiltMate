@@ -209,7 +209,18 @@ function onTilt(degree: number) {
 
 function onSingleClick() {
   if (gameFinished || settingsOpen) return;
-  if (isTableMode) return;
+
+  if (isTableMode) {
+    // Sides stop propagation, so this only fires for center-strip taps.
+    if (gameStarted && (clocks.left.isRunning() || clocks.right.isRunning())) {
+      clocks.left.pause();
+      clocks.right.pause();
+      tickingSound.stop();
+      showHint('Tap your side to resume · Long press for settings · Double tap to reset');
+      updateClockOpacity();
+    }
+    return;
+  }
 
   if (!gameStarted && currentTiltDegree !== 0) {
     if (currentTiltDegree < 0) {
