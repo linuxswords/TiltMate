@@ -488,6 +488,32 @@ html, body {
   padding-top: 1.5rem;
 }
 
+.intro-visual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.intro-image {
+  display: block;
+  max-width: 100%;
+  max-height: 30vh;
+  border-radius: 8px;
+  object-fit: contain;
+}
+
+.intro-image-icon {
+  max-height: 22vh;
+  border-radius: 18px;
+}
+
+.intro-image-svg svg {
+  width: 100%;
+  max-width: 240px;
+  height: auto;
+}
+
 .intro-content h2 {
   margin: 0;
 }
