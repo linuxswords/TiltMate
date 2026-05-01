@@ -68,6 +68,7 @@ function applyMode(flat: boolean, gravityX = 0) {
     clearColorIndicators();
   }
 
+  updateTappableHighlight();
   updateHints();
 }
 
@@ -256,11 +257,12 @@ function onSideTap(side: 'left' | 'right') {
   const otherClock = side === 'left' ? clocks.right : clocks.left;
 
   if (!gameStarted) {
-    // Tapper is black (presses clock), other side (white) starts running
+    // Tapper becomes black, the other side (white) starts running
     setColorForSide(side, 'black');
     otherClock.start();
     tickingSound.start();
     gameStarted = true;
+    updateTappableHighlight();
     requestWakeLock();
     requestFullscreen();
     showHint('Tap your side to switch');
@@ -342,12 +344,14 @@ function restartAllClocks() {
   } else {
     updateColorIndicators(currentTiltDegree);
   }
+  updateTappableHighlight();
   updateHints();
 }
 
 function onClockFinished() {
   tickingSound.stop();
   gameFinished = true;
+  updateTappableHighlight();
 }
 
 function clearColorIndicators() {
@@ -355,6 +359,12 @@ function clearColorIndicators() {
   colorLeftEl.className = 'color-indicator';
   colorRightEl.textContent = '';
   colorRightEl.className = 'color-indicator';
+}
+
+function updateTappableHighlight() {
+  const show = isTableMode && !gameStarted && !gameFinished;
+  leftSideEl.classList.toggle('tappable', show);
+  rightSideEl.classList.toggle('tappable', show);
 }
 
 function setColorForSide(side: 'left' | 'right', color: 'white' | 'black') {
