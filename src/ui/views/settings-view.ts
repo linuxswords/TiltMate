@@ -1,6 +1,7 @@
 import type { TimeSettings } from '../../settings/time-settings';
 import { PRESETS, createCustom, isCustom } from '../../settings/time-settings';
 import * as prefs from '../../settings/preferences';
+import { IntroView } from './intro-view';
 
 export class SettingsView {
   private el: HTMLElement;
@@ -250,6 +251,7 @@ export class SettingsView {
         <p class="version">Web Version</p>
         <div class="info-links">
           <a href="https://github.com/linuxswords/TiltMate" target="_blank" rel="noopener" class="info-link">GitHub</a>
+          <button class="info-link info-link-btn" id="showIntroBtn">Show intro</button>
         </div>
         <div class="base-model-section">
           <p>3D-printable seesaw base model:</p>
@@ -262,6 +264,12 @@ export class SettingsView {
       this.el.innerHTML = this.render();
       this.bindEvents();
       this.highlightActive();
+    });
+
+    this.el.querySelector('#showIntroBtn')!.addEventListener('click', () => {
+      const parent = this.el.parentElement!;
+      this.close(false);
+      new IntroView(parent, () => {});
     });
   }
 

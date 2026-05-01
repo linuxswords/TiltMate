@@ -76,3 +76,11 @@ export function isShowHintsEnabled(): boolean {
   const v = get('show_hints');
   return v === null ? true : v === 'true';
 }
+
+export function isIntroSeen(): boolean {
+  return get('intro_seen_v1') === 'true';
+}
+
+export function setIntroSeen(seen: boolean): void {
+  set('intro_seen_v1', String(seen));
+}

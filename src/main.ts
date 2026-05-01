@@ -4,6 +4,7 @@ import { KeyboardFallback } from './sensor/keyboard-fallback';
 import { TickingSoundManager } from './sound/ticking-sound';
 import { GestureDetector } from './ui/gesture';
 import { SettingsView } from './ui/views/settings-view';
+import { IntroView } from './ui/views/intro-view';
 import { minutesAsMs } from './settings/time-settings';
 import * as prefs from './settings/preferences';
 import './style.css';
@@ -471,6 +472,11 @@ new GestureDetector(gameEl, {
 // --- Initial state ---
 updateMoveDisplay();
 updateHints();
+
+// --- First-visit intro ---
+if (!prefs.isIntroSeen()) {
+  new IntroView(app, () => {});
+}
 
 // Suppress unused variable warning
 void wakeLock;
