@@ -183,6 +183,10 @@ export class SettingsView {
           <p>Keyboard controls (desktop):</p>
           <p><kbd>&larr;</kbd> / <kbd>&rarr;</kbd> Tilt &nbsp; <kbd>Space</kbd> Tap &nbsp; <kbd>R</kbd> Reset</p>
         </div>
+        <div class="reload-section">
+          <button class="reload-btn" id="reloadAppBtn">Reload App</button>
+          <p class="reload-hint">Clears the cache and fetches the latest version.</p>
+        </div>
       </div>
     `;
 
@@ -212,6 +216,26 @@ export class SettingsView {
         this.el.querySelectorAll('.sens-btn').forEach((b) => b.classList.remove('active'));
         btn.classList.add('active');
       });
+    });
+
+    this.el.querySelector('#reloadAppBtn')!.addEventListener('click', async () => {
+      const btn = this.el.querySelector('#reloadAppBtn') as HTMLButtonElement;
+      btn.disabled = true;
+      btn.textContent = 'Reloading…';
+      try {
+        if ('serviceWorker' in navigator) {
+          const regs = await navigator.serviceWorker.getRegistrations();
+          await Promise.all(regs.map((r) => r.unregister()));
+        }
+        if ('caches' in window) {
+          const keys = await caches.keys();
+          await Promise.all(keys.map((k) => caches.delete(k)));
+        }
+      } finally {
+        const url = new URL(window.location.href);
+        url.searchParams.set('_r', Date.now().toString());
+        window.location.replace(url.toString());
+      }
     });
   }
 
