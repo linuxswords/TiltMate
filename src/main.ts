@@ -48,18 +48,22 @@ const leftSideEl = document.getElementById('leftSide')!;
 const rightSideEl = document.getElementById('rightSide')!;
 
 // --- Mode detection ---
-function applyMode(table: boolean, gravityX = 0) {
-  isTableMode = table;
-  gameEl.classList.toggle('flat-mode', table);
-
-  // When in seesaw mode but viewport is portrait-locked, rotate content to match
+function applyMode(flat: boolean, gravityX = 0) {
+  // A portrait viewport means the phone is held vertically — there's no real
+  // seesaw possible, so use chess-clock (table) tap behavior. The sensor's
+  // flat/upright reading only switches between table and seesaw when the
+  // viewport is landscape.
   const viewportIsPortrait = window.innerHeight > window.innerWidth;
-  const needsRotation = !table && viewportIsPortrait;
+  const tableMode = flat || viewportIsPortrait;
+  isTableMode = tableMode;
+  gameEl.classList.toggle('flat-mode', flat);
+
+  const needsRotation = !flat && viewportIsPortrait;
   gameEl.classList.toggle('seesaw-rotated', needsRotation);
   gameEl.classList.toggle('seesaw-rotated-cw', needsRotation && gravityX >= 0);
   gameEl.classList.toggle('seesaw-rotated-ccw', needsRotation && gravityX < 0);
 
-  if (table && !gameStarted) {
+  if (tableMode && !gameStarted) {
     clearColorIndicators();
   }
 
