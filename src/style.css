@@ -54,11 +54,11 @@ html, body {
   height: 2.5rem;
 }
 
-.color-indicator.black-piece {
+.color-indicator.white-piece {
   color: #fff;
 }
 
-.color-indicator.white-piece {
+.color-indicator.black-piece {
   color: #888;
 }
 
