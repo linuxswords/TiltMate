@@ -185,8 +185,8 @@ export class SettingsView {
           <p><kbd>&larr;</kbd> / <kbd>&rarr;</kbd> Tilt &nbsp; <kbd>Space</kbd> Tap &nbsp; <kbd>R</kbd> Reset</p>
         </div>
         <div class="reload-section">
-          <button class="reload-btn" id="reloadAppBtn">Reload App</button>
-          <p class="reload-hint">Clears the cache and fetches the latest version.</p>
+          <button class="reload-btn" id="reloadAppBtn">Update App</button>
+          <p class="reload-hint">Clears all caches and resets settings to defaults, then fetches the latest version from the server.</p>
         </div>
       </div>
     `;
@@ -220,9 +220,12 @@ export class SettingsView {
     });
 
     this.el.querySelector('#reloadAppBtn')!.addEventListener('click', async () => {
+      if (!confirm('Update will clear all caches and reset settings to defaults. Continue?')) {
+        return;
+      }
       const btn = this.el.querySelector('#reloadAppBtn') as HTMLButtonElement;
       btn.disabled = true;
-      btn.textContent = 'Reloading…';
+      btn.textContent = 'Updating…';
       try {
         if ('serviceWorker' in navigator) {
           const regs = await navigator.serviceWorker.getRegistrations();
@@ -232,6 +235,8 @@ export class SettingsView {
           const keys = await caches.keys();
           await Promise.all(keys.map((k) => caches.delete(k)));
         }
+        try { localStorage.clear(); } catch { /* ignore */ }
+        try { sessionStorage.clear(); } catch { /* ignore */ }
       } finally {
         const url = new URL(window.location.href);
         url.searchParams.set('_r', Date.now().toString());
