@@ -37,13 +37,9 @@ html, body {
   position: relative;
 }
 
-.clock-side.tappable {
-  animation: tappable-pulse 1.6s ease-in-out infinite;
-}
-
-@keyframes tappable-pulse {
-  0%, 100% { background: rgba(79, 195, 247, 0.04); }
-  50%      { background: rgba(79, 195, 247, 0.18); }
+.clock-side.active-side {
+  background: rgba(79, 195, 247, 0.12);
+  transition: background 0.2s;
 }
 
 /* In seesaw/landscape mode, shift content up since the base covers the bottom */

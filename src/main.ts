@@ -68,7 +68,6 @@ function applyMode(flat: boolean, gravityX = 0) {
     clearColorIndicators();
   }
 
-  updateTappableHighlight();
   updateHints();
 }
 
@@ -273,7 +272,6 @@ function onSideTap(side: 'left' | 'right') {
     otherClock.start();
     tickingSound.start();
     gameStarted = true;
-    updateTappableHighlight();
     requestWakeLock();
     requestFullscreen();
     showHint('Tap your side to switch');
@@ -355,14 +353,13 @@ function restartAllClocks() {
   } else {
     updateColorIndicators(currentTiltDegree);
   }
-  updateTappableHighlight();
   updateHints();
 }
 
 function onClockFinished() {
   tickingSound.stop();
   gameFinished = true;
-  updateTappableHighlight();
+  updateClockOpacity();
 }
 
 function clearColorIndicators() {
@@ -370,12 +367,6 @@ function clearColorIndicators() {
   colorLeftEl.className = 'color-indicator';
   colorRightEl.textContent = '';
   colorRightEl.className = 'color-indicator';
-}
-
-function updateTappableHighlight() {
-  const show = isTableMode && !gameStarted && !gameFinished;
-  leftSideEl.classList.toggle('tappable', show);
-  rightSideEl.classList.toggle('tappable', show);
 }
 
 function setColorForSide(side: 'left' | 'right', color: 'white' | 'black') {
@@ -413,11 +404,19 @@ function updateColorIndicators(degree: number) {
 }
 
 function updateClockOpacity() {
-  if (!gameStarted) return;
+  if (!gameStarted) {
+    clockLeftEl.classList.remove('dimmed');
+    clockRightEl.classList.remove('dimmed');
+    leftSideEl.classList.remove('active-side');
+    rightSideEl.classList.remove('active-side');
+    return;
+  }
   const leftRunning = clocks.left.isRunning();
   const rightRunning = clocks.right.isRunning();
   clockLeftEl.classList.toggle('dimmed', !leftRunning);
   clockRightEl.classList.toggle('dimmed', !rightRunning);
+  leftSideEl.classList.toggle('active-side', leftRunning);
+  rightSideEl.classList.toggle('active-side', rightRunning);
 }
 
 function updateMoveDisplay() {
