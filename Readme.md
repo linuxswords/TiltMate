@@ -90,6 +90,11 @@ STL and STEP files are available in [base-models/](./base-models/).
 ### Sound Effects
 
 - **Clock Ticking Sound**: [Lux Kitchen Timer.wav](https://freesound.org/s/670889/) by [knufds](https://freesound.org/people/knufds/) - Licensed under [Creative Commons 0 (CC0)](https://creativecommons.org/publicdomain/zero/1.0/)
+## todo 
+
+* [ ] intro should support swipe
+* [ ] IOS pawn indicator is different, use dedicated pictures instead of emojis 
+* [ ] IOS tilting is not working
 
 ## Sponsor
 
