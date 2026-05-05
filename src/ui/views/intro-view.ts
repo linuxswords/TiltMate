@@ -80,15 +80,46 @@ export class IntroView {
 
   private bindEvents(): void {
     this.el.querySelector('#introSkip')!.addEventListener('click', () => this.finish());
-    this.el.querySelector('#introCta')!.addEventListener('click', () => {
-      if (this.index < PANELS.length - 1) {
-        this.index++;
-        this.el.innerHTML = this.render();
-        this.bindEvents();
-      } else {
-        this.finish();
+    this.el.querySelector('#introCta')!.addEventListener('click', () => this.next());
+
+    const panel = this.el.querySelector('.intro-panel') as HTMLElement;
+    let startX = 0;
+    let startY = 0;
+    let tracking = false;
+    panel.addEventListener('pointerdown', (e) => {
+      tracking = true;
+      startX = e.clientX;
+      startY = e.clientY;
+    });
+    panel.addEventListener('pointerup', (e) => {
+      if (!tracking) return;
+      tracking = false;
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+        if (dx < 0) this.next();
+        else this.prev();
       }
     });
+    panel.addEventListener('pointercancel', () => { tracking = false; });
+  }
+
+  private next(): void {
+    if (this.index < PANELS.length - 1) {
+      this.index++;
+      this.el.innerHTML = this.render();
+      this.bindEvents();
+    } else {
+      this.finish();
+    }
+  }
+
+  private prev(): void {
+    if (this.index > 0) {
+      this.index--;
+      this.el.innerHTML = this.render();
+      this.bindEvents();
+    }
   }
 
   private finish(): void {
