@@ -9,6 +9,21 @@ import { minutesAsMs } from './settings/time-settings';
 import * as prefs from './settings/preferences';
 import './style.css';
 
+const PAWN_SVG = `
+<svg viewBox="0 0 24 32" xmlns="http://www.w3.org/2000/svg" fill="currentColor" aria-hidden="true">
+  <circle cx="12" cy="7" r="4.5"/>
+  <rect x="7.5" y="12" width="9" height="2.5" rx="1"/>
+  <polygon points="9.5,14.5 14.5,14.5 16.5,22 7.5,22"/>
+  <rect x="4" y="22" width="16" height="2.5"/>
+  <rect x="3" y="24" width="18" height="3" rx="0.5"/>
+</svg>
+`.trim();
+
+function setPiece(el: HTMLElement, color: 'white' | 'black') {
+  el.innerHTML = PAWN_SVG;
+  el.className = `color-indicator ${color}-piece`;
+}
+
 // --- State ---
 let currentTiltDegree = 0;
 let moveCount = 0;
@@ -373,31 +388,23 @@ function setColorForSide(side: 'left' | 'right', color: 'white' | 'black') {
   const sideEl = side === 'left' ? colorLeftEl : colorRightEl;
   const otherEl = side === 'left' ? colorRightEl : colorLeftEl;
   if (color === 'black') {
-    sideEl.textContent = '\u265F';
-    sideEl.className = 'color-indicator black-piece';
-    otherEl.textContent = '\u2659';
-    otherEl.className = 'color-indicator white-piece';
+    setPiece(sideEl, 'black');
+    setPiece(otherEl, 'white');
   } else {
-    sideEl.textContent = '\u2659';
-    sideEl.className = 'color-indicator white-piece';
-    otherEl.textContent = '\u265F';
-    otherEl.className = 'color-indicator black-piece';
+    setPiece(sideEl, 'white');
+    setPiece(otherEl, 'black');
   }
 }
 
 function updateColorIndicators(degree: number) {
   if (degree < 0) {
-    colorLeftEl.textContent = '\u2659';
-    colorLeftEl.className = 'color-indicator white-piece';
-    colorRightEl.textContent = '\u265F';
-    colorRightEl.className = 'color-indicator black-piece';
+    setPiece(colorLeftEl, 'white');
+    setPiece(colorRightEl, 'black');
     clockLeftEl.classList.remove('dimmed');
     clockRightEl.classList.add('dimmed');
   } else if (degree > 0) {
-    colorRightEl.textContent = '\u2659';
-    colorRightEl.className = 'color-indicator white-piece';
-    colorLeftEl.textContent = '\u265F';
-    colorLeftEl.className = 'color-indicator black-piece';
+    setPiece(colorRightEl, 'white');
+    setPiece(colorLeftEl, 'black');
     clockRightEl.classList.remove('dimmed');
     clockLeftEl.classList.add('dimmed');
   }

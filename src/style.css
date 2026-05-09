@@ -49,9 +49,16 @@ html, body {
 }
 
 .color-indicator {
-  font-size: 2rem;
   margin-bottom: 0.5rem;
   height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.color-indicator svg {
+  height: 100%;
+  width: auto;
 }
 
 .color-indicator.white-piece {
