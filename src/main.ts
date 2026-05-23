@@ -31,6 +31,8 @@ let gameStarted = false;
 let gameFinished = false;
 let settingsOpen = false;
 let isTableMode = window.matchMedia('(orientation: portrait)').matches;
+let sensorFlat = false;
+let sensorGravityX = 0;
 
 // --- DOM ---
 const app = document.getElementById('app')!;
@@ -88,9 +90,13 @@ function applyMode(flat: boolean, gravityX = 0) {
 
 applyMode(isTableMode);
 
-// Fallback: use media query when sensor is not available
+// Re-apply mode on viewport rotation (sensor handles flat/upright; viewport handles layout)
 window.matchMedia('(orientation: portrait)').addEventListener('change', (e) => {
-  if (!tiltSensor.isAvailable()) applyMode(e.matches);
+  if (tiltSensor.isAvailable()) {
+    applyMode(sensorFlat, sensorGravityX);
+  } else {
+    applyMode(e.matches);
+  }
 });
 
 // --- Initialize clocks ---
@@ -136,7 +142,9 @@ const tiltSensor = new TiltSensor();
 tiltSensor.setSensitivity(prefs.getTiltSensitivity());
 tiltSensor.setCallback(onTilt);
 tiltSensor.setPostureCallback((posture, gravityX) => {
-  applyMode(posture === 'flat', gravityX);
+  sensorFlat = posture === 'flat';
+  sensorGravityX = gravityX;
+  applyMode(sensorFlat, sensorGravityX);
 });
 
 if (tiltSensor.isAvailable()) {
